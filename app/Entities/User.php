@@ -28,7 +28,7 @@ class User extends Entity
         'username'      => 'string',
         'first_name'    => 'string',
         'last_name'     => 'string',
-        'birthdate'     => 'date',
+        'birthdate'     => 'datetime',
         'id_permission' => 'integer',
         'created_at'    => 'datetime',
         'updated_at'    => 'datetime',
