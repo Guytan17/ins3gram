@@ -54,9 +54,9 @@
                     data: 'status',
                     render: function(data, type, row) {
                         if (data === 'active' || row.deleted_at === null) {
-                            return '<span class="badge bg-success">Actif</span>';
+                            return '<span class="badge text-bg-success">Actif</span>';
                         } else {
-                            return '<span class="badge bg-danger">Inactif</span>';
+                            return '<span class="badge text-bg-danger">Inactif</span>';
                         }
                     }
                 },
