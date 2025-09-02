@@ -22,6 +22,10 @@ class Recipe extends Migration
                 'unique'=>true,
                 'null'=>false
             ],
+            'description'=>[
+                'type'=>'text',
+                'null'=>true,
+            ],
             'alcool'=>[
                 'type'=>'BOOLEAN'
             ],
