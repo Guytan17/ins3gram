@@ -3,6 +3,29 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
     //Routes vers le tableau de bord
     $routes->get('dashboard', 'Admin::dashboard');
 
+    $routes->group('recipe',function($routes){
+        $routes->get('/','Recipe::index');
+        $routes->get('(:num)','Recipe::edit/$1');
+        $routes->get('new','Recipe::create');
+    });
+    $routes->group('ingredient',function($routes){
+        $routes->get('/','Ingredient::index');
+    });
+
+    $routes->group('categ-ing',function($routes){
+        $routes->get('/','CategIng::index');
+        $routes->post('insert','CategIng::insert');
+        $routes->post('update','CategIng::update');
+        $routes->post('delete','CategIng::delete');
+    });
+
+    $routes->group('brand',function($routes){
+        $routes->get('/','Brand::index');
+        $routes->post('insert','Brand::insert');
+        $routes->post('update','Brand::update');
+        $routes->post('delete','Brand::delete');
+    });
+
     $routes->group('user',function ($routes){
        $routes->get('/','User::index');
        $routes->get('(:num)','User::edit/$1');
@@ -17,10 +40,5 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
        $routes->post('update','UserPermission::update');
        $routes->post('insert','UserPermission::insert');
        $routes->post('delete','UserPermission::delete');
-    });
-    $routes->group('recipe',function($routes){
-        $routes->get('/','Recipe::index');
-        $routes->get('(:num)','Recipe::edit/$1');
-        $routes->get('new','Recipe::create');
     });
 });

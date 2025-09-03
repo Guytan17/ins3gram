@@ -11,6 +11,29 @@
     "icon": "<i class=\"nav-icon fas fa-martini-glass-citrus\"></i>",
     "class":""
   },
+  "ingredients": {
+    "title": "Ingrédients",
+    "url": "/",
+    "icon": "<i class=\"nav-icon fas fa-wine-bottle\"></i>",
+    "class": "",
+    "subs": {
+      "ingredient":{
+        "title": "Liste des ingrédients",
+        "url": "admin/ingredient",
+        "icon": "<i class=\"nav-icon fas fa-lemon\"></i>"
+      },
+      "categ-ing":{
+        "title":"catégories d'ingrédients",
+        "url": "admin/categ-ing",
+        "icon": "<i class=\"nav-icon fas fa-jar-wheat\"></i>"
+      },
+      "brand": {
+        "title": "Marques",
+        "url": "admin/brand",
+        "icon": "<i class=\"nav-icon far fa-registered\"></i>"
+      }
+    }
+  },
   "administration": {
     "title": "Administration",
     "url": "/",
