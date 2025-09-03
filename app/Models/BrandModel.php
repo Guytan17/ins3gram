@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Traits\DataTableTrait;
 
 class BrandModel extends Model
 {
+    use DataTableTrait;
     protected $table            = 'brand';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
@@ -23,4 +25,15 @@ class BrandModel extends Model
             'is_unique'=>'Cette marque existe déjà.',
         ],
     ];
+    protected function getDataTableConfig(): array
+    {
+        return [
+            'searchable_fields' => [
+                'name',
+                'id',
+            ],
+            'joins' => [],
+            'select' => '*',
+        ];
+    }
 }
