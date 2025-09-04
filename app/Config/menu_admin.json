@@ -23,7 +23,7 @@
         "icon": "<i class=\"nav-icon fas fa-lemon\"></i>"
       },
       "categ-ing":{
-        "title":"catégories d'ingrédients",
+        "title":"Catégories d'ingrédients",
         "url": "admin/categ-ing",
         "icon": "<i class=\"nav-icon fas fa-jar-wheat\"></i>"
       },
