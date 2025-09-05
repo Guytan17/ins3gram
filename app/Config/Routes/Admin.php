@@ -10,6 +10,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
         $routes->post('insert','Recipe::insert');
         $routes->post('update','Recipe::update');
     });
+
     $routes->group('ingredient',function($routes){
         $routes->get('/','Ingredient::index');
     });

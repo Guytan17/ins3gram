@@ -71,5 +71,6 @@
         window.refreshTable = function() {
             table.ajax.reload(null, false); // false pour garder la pagination
         };
+
     });
 </script>

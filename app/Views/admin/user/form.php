@@ -106,7 +106,7 @@
                                 <?= !isset($user) ? 'required' : '' ?>>
                             <label for="password">
                                 <?php if(isset($user)) : ?>
-                                    Nouveau mot de passe <small class="text-muted">(laisser vide pour conserver l'actuel)</small>
+                                        Nouveau mot de passe <small class="text-muted">(laisser vide pour conserver l'actuel)</small>
                                 <?php else : ?>
                                     Mot de passe <span class="text-danger">*</span>
                                 <?php endif; ?>
