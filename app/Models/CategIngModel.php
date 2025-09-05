@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Traits\DataTableTrait;
 
 class CategIngModel extends Model
 {
+    use DataTableTrait;
     protected $table            = 'categ_ing';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
@@ -14,10 +16,25 @@ class CategIngModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['id_categ_parent','name'];
     protected $useTimestamps = false;
-    protected $validationRules = [
-        'name'          => 'required|max_length[255]|is_unique[categ_ing.name,id,{id}]',
-        'id_categ_parent'=> 'permit_empty|integer',
-    ];
+    protected $beforeInsert = ['setInsertValidationRules'];
+    protected $beforeUpdate = ['setUpdateValidationRules'];
+
+    protected function setInsertValidationRules(array $data){
+        $this->validationRules = [
+            'name'    => 'required|max_length[255]|is_unique[categ_ing.name]',
+            'id_categ_parent'=>'permit_empty|integer',
+        ];
+        return $data;
+    }
+
+    protected function setUpdateValidationRules(array $data){
+        $id = $data['data']['id'] ?? null;
+        $this->validationRules = [
+            'name'    => "required|max_length[255]|is_unique[categ_ing.name,id,$id]",
+            'id_categ_parent'=>'permit_empty',
+        ];
+        return $data;
+    }
     protected $validationMessages = [
         'name' => [
             'required'   => 'Le nom de la catégorie est obligatoire.',
@@ -28,4 +45,22 @@ class CategIngModel extends Model
             'integer' => 'L’ID du parent doit être un nombre.',
         ],
     ];
+    protected function getDataTableConfig(): array
+    {
+        return [
+            'searchable_fields' => [
+                'categ_ing.name',
+                'categ_ing.id',
+                'parent_categ.name',
+            ],
+            'joins' => [
+                [
+                'table'=>'categ_ing as parent_categ',
+                'condition'=>'parent_categ.id = categ_ing.id_categ_parent',
+                'type'=>'left',
+                ]
+            ],
+            'select' => 'categ_ing.*, parent_categ.name as parent_name',
+        ];
+    }
 }
