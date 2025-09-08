@@ -12,7 +12,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
     });
 
     $routes->group('ingredient',function($routes){
-        $routes->get('/','Ingredient::index');
+        $routes->get('search','Ingredient::search');
+    });
+
+    $routes->group('unit',function($routes){
+        $routes->get('search','Unit::search');
     });
 
     $routes->group('categ-ing',function($routes){
@@ -36,6 +40,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
        $routes->post('update','User::update');
        $routes->post('insert','User::insert');
        $routes->post('switch-active','User::switchActive');
+       $routes->get('search','User::search');
     });
 
     $routes->group('user-permission',function($routes){

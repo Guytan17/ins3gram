@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Select2Searchable;
 use CodeIgniter\Model;
 
 class IngredientModel extends Model
 {
+    use Select2Searchable;
     protected $table = 'ingredient';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
@@ -33,4 +35,7 @@ class IngredientModel extends Model
             'integer' => 'L’ID de marque doit être un nombre.',
         ],
     ];
+    protected $select2SearchFields= ['name','description'];
+    protected $select2DisplayField='name';
+    protected $select2AdditionalFields=['description'];
 }
