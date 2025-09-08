@@ -7,9 +7,23 @@
   },
   "recipe": {
     "title": "Recettes",
-    "url": "admin/recipe",
-    "icon": "<i class=\"nav-icon fas fa-martini-glass-citrus\"></i>",
-    "class":""
+    "url": "/",
+    "icon": "<i class=\"nav-icon fas fa-martini-glass-empty\"></i>",
+    "class":"",
+    "subs": {
+      "recipes": {
+        "title": "Liste des recettes",
+        "url" : "admin/recipe",
+        "icon" : "<i class=\"nav-icon fas fa-martini-glass-citrus\"></i>",
+        "class": ""
+      },
+      "tag": {
+        "title": "Mots-clés",
+        "url": "admin/tag",
+        "icon": "<i class=\"nav-icon fas fa-tags\"></i>",
+        "class": ""
+      }
+    }
   },
   "ingredients": {
     "title": "Ingrédients",

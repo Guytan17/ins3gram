@@ -56,7 +56,8 @@ endif;
                     <!-- START:GENERAL -->
                     <div class="tab-pane fade show active" id="general-tab-pane" role="tabpanel">
                         <div class="mb-3">
-                            <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description globale de la recette"></textarea>
+                            <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description globale de la recette" ><?= isset($recipe['description']) ?
+                                    ($recipe['description']) : ''?></textarea>
                         </div>
                         <div>
                             <div class="form-check form-switch">
@@ -78,9 +79,8 @@ endif;
                             if(isset($ingredients)):
                             $cpt_ing = 0;
                             foreach ($ingredients as $ingredient) :
-                                $cpt_ing++
+                                $cpt_ing++;
                                 ?>
-
                                 <div class="row mb-3 row-ingredient">
                                     <div class="col-md-1 text-center">
                                         <i class="fas fa-trash-alt text-danger supp-ingredient""></i>

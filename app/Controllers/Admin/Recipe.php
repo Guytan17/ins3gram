@@ -28,6 +28,7 @@ class Recipe extends BaseController
             //récupération de l'ID de la recette ajoutée
             $id_recipe = $rm->getInsertID();
             $qm = Model('QuantityModel');
+            print_r($data);die;
             //Ajout des ingrédients
             foreach($data['ingredients'] as $ingredient) {
                 $ingredient['id_recipe']=$id_recipe;
