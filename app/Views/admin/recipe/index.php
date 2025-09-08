@@ -42,19 +42,32 @@
                 {data:'id'},
                 {data:'name'},
                 {data:'creator_name'},
-                {data:'updated_at'},
-                {data:'deleted_at'},//Afficher ou non le statut actif de la recette
+                {data:'updated_at',
+                    render:function(data,type,row,meta){
+                    let date =new Date(data);
+                    return date.toLocaleDateString("fr")+ " " + date.toLocaleTimeString("fr");
+                    }
+                },
+                {data:'deleted_at',
+                    render:function(data,type,row){
+                        if(data==='active'||row.deleted_at === null){
+                            return '<span class="badge text-bg-success">Active</span>';
+                        } else {
+                            return '<span class="badge text-bg-danger">Inactive</span>';
+                        }
+                    }
+                },
                 {
                     data: null,
                     orderable: false,
                     render: function(data, type, row) {
                         return `
                             <div class="btn-group" role="group">
-                                <button onclick="showModal(${row.id},'${row.name}')" class="btn btn-sm btn-warning" title="Modifier">
+                                <a href="<?= base_url('admin/recipe/') ?>${row.id}") class="btn btn-sm btn-warning text-white" title="Modifier">
                                     <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deletePerm(${row.id})" class="btn btn-sm btn-danger" title="Supprimer">
-                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <button onclick="" class="btn btn-sm btn-danger text-white" title="Désactiver">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
                         `;

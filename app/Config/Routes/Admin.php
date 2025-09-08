@@ -11,6 +11,13 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
         $routes->post('update','Recipe::update');
     });
 
+    $routes->group('tag',function($routes){
+        $routes->get('/','Tag::index');
+        $routes->post('update','Tag::update');
+        $routes->post('insert','Tag::insert');
+        $routes->post('delete','Tag::delete');
+    });
+
     $routes->group('ingredient',function($routes){
         $routes->get('search','Ingredient::search');
     });
