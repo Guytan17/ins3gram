@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\DataTableTrait;
 use App\Traits\Select2Searchable;
 use CodeIgniter\Model;
 
 class IngredientModel extends Model
 {
     use Select2Searchable;
+    use DataTableTrait;
     protected $table = 'ingredient';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
@@ -38,4 +40,27 @@ class IngredientModel extends Model
     protected $select2SearchFields= ['name','description'];
     protected $select2DisplayField='name';
     protected $select2AdditionalFields=['description'];
+    protected function getDataTableConfig(): array
+    {
+        return [
+            'searchable_fields' => [
+              'name',
+              'description',
+              'brand.name',
+              'categ_ing.name'
+            ],
+            'joins' => [
+                [
+                'table' => 'brand',
+                'condition' => 'ingredient.id_brand = brand.id',
+                'type' => 'left'// permet de lister les éléments même si pas de correspondance (par forcément de marque ou de catégorie associée)
+                ],
+                [
+                'table' =>'categ_ing',
+                'condition' => 'ingredient.id_categ=categ_ing.id',
+                'type' => 'left'
+                ]
+            ], 'select' => 'ingredient.*, brand.name as brand, categ_ing.name as category'
+        ];
+    }
 }
