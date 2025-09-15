@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="clearfix">
                     <h1 class="float-start display-3 me-4">404</h1>
-                    <h4 class="pt-3">Cette page n'existe pas.</h4>
+                    <h4 class="pt-3">Y'a rien frère (Cheh)</h4>
                 </div>
                 <div class="input-group">
                     <a class="btn btn-primary" href="<?= base_url('/') ?>">Retour à l'accueil</a>
