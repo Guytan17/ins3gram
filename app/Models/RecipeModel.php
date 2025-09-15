@@ -72,10 +72,7 @@ class RecipeModel extends Model
     {
         return [
             'searchable_fields' => [
-                'id',
                 'name',
-                'user.username',
-                'updated_at',
             ],
             'joins' => [
                 [
@@ -84,9 +81,15 @@ class RecipeModel extends Model
                     'type' => 'left'
                 ]
             ],
-            'select' => 'recipe.*, user.username as creator_name',
+            'select' => 'recipe.*, user.username as creator',
             'with_deleted' => true
         ];
+    }
+    public function reactive(int $id): bool
+    {
+        return $this->builder()
+            ->where('id', $id)
+            ->update(['deleted_at' => null, 'updated_at' => date('Y-m-d H:i:s')]);
     }
 }
 

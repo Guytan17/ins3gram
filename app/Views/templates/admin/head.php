@@ -37,6 +37,7 @@
     <link href="<?= base_url('/css/bootstrap-datepicker.min.css') ?>" rel="stylesheet">
 
     <!-- Javascript -->
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="<?= base_url('/js/jquery-3.7.1.min.js') ?>"></script>
     <script src="<?= base_url('/js/config.js') ?>"></script>

@@ -18,7 +18,7 @@
         "class": ""
       },
       "tag": {
-        "title": "Mots-clés",
+        "title": "Mots-clés ",
         "url": "admin/tag",
         "icon": "<i class=\"nav-icon fas fa-tags\"></i>",
         "class": ""
@@ -33,7 +33,7 @@
     "subs": {
       "ingredient":{
         "title": "Liste des ingrédients",
-        "url": "admin/ingredient",
+        "url": "/admin/ingredient",
         "icon": "<i class=\"nav-icon fas fa-lemon\"></i>"
       },
       "categ-ing":{
