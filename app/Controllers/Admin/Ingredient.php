@@ -29,4 +29,54 @@ class Ingredient extends BaseController
         // Réponse JSON
         return $this->response->setJSON($result);
     }
+    public function index(){
+        return $this->view('/admin/ingredient/index');
+    }
+    public function create() {
+        helper('form');
+        $brands=model('BrandModel')->orderBy('name')->findAll();
+        $categories=model('CategIngModel')->orderBy('name')->findAll();
+        return $this->view('/admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories]);
+    }
+    public function insert()
+    {
+        $im = Model('IngredientModel');
+        $data = $this->request->getPost();
+        print_r($data);die;
+        if(empty($data['id_brand']))unset($data['id_brand']);
+        if ($im->insert($data)) {
+            $this->success('L\'ingrédient a été ajouté avec succès');
+        } else {
+            foreach ($im->errors() as $error):
+                $this->error($error);
+            endforeach;
+        }
+
+        return $this->redirect('admin/ingredient');
+    }
+    public function edit($id_ingredient) {
+        helper('form');
+        $brands=model('BrandModel')->orderBy('name')->findAll();
+        $categories=model('CategIngModel')->orderBy('name')->findAll();
+        $ingredient=model('IngredientModel')->find($id_ingredient);
+        if (!$ingredient) {
+            $this->error('Ingrédient introuvable');
+            return $this->redirect('admin/ingredient');
+        }
+        return $this->view('admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories, 'ingredient'=>$ingredient]);
+    }
+    public function update(){
+        $data=$this->request->getPost();
+        $id_ingredient=$data['id_ingredient'];
+        $im=model('IngredientModel');
+        if(empty($data['id_brand']))unset($data['id_brand']);
+        if ($im->update($id_ingredient,$data)) {
+            $this->success('L\'ingrédient a été modifié avec succès');
+        } else {
+            foreach ($im->errors() as $error):
+                $this->error($error);
+            endforeach;
+        }
+        return $this->redirect('/admin/ingredient');
+    }
 }
