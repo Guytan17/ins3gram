@@ -113,7 +113,7 @@ function initAjaxSelect2(selector, options) {
          * @param {object} item - Un élément du tableau results
          * @returns {jQuery|string} - HTML à afficher
          */
-        templateResult: function(item) {
+        templateResult: function (item) {
             // Pendant le chargement, afficher le texte de chargement
             if (item.loading) {
                 return item.text;
@@ -143,7 +143,7 @@ function initAjaxSelect2(selector, options) {
          * @param {object} item - L'élément sélectionné
          * @returns {string} - Texte à afficher dans le select
          */
-        templateSelection: function(item) {
+        templateSelection: function (item) {
             // On affiche seulement le nom/titre
             return item.text || 'Sélection sans nom';
         }
@@ -153,4 +153,20 @@ function initAjaxSelect2(selector, options) {
     console.log('Select2 initialisé sur :', selector, 'avec URL :', config.url);
 
     return true; // Succès
+}
+function initTinymce(selector) {
+    tinymce.init({
+        selector: selector,
+        height : "200",
+        language: 'fr_FR',
+        menubar: false,
+        plugins: [
+            'preview', 'code', 'fullscreen','wordcount', 'link','lists',
+        ],
+        skin: 'oxide',
+        content_encoding: 'text',
+        toolbar: 'undo redo | formatselect | ' +
+            'bold italic link forecolor backcolor removeformat | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +' fullscreen  preview code'
+    });
 }

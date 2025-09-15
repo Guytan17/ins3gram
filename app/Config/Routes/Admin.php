@@ -20,6 +20,12 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
 
     $routes->group('ingredient',function($routes){
         $routes->get('search','Ingredient::search');
+        $routes->get('/','Ingredient::index');
+        $routes->get('new','Ingredient::create');
+        $routes->get('(:num)','Ingredient::edit/$1');
+        $routes->post('insert','Ingredient::insert');
+        $routes->post('update','Ingredient::update');
+        $routes->post('delete','Ingredient::delete');
     });
 
     $routes->group('unit',function($routes){
