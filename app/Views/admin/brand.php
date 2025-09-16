@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-3">
         <div class="card">
-            <?= form_open('admin/brand/insert')?>
+            <?= form_open_multipart('admin/brand/insert')?>
                 <div class="card-header h4">
                     Créer une marque
                 </div>
@@ -10,6 +10,10 @@
                         <input class="form-control" type="text" id="name" name="name" placeholder="Nom de la marque" required>
                         <label for="name">Nom de la marque</label>
                     </div>
+                </div>
+                <div>
+                    <input type="file" class="form-control" name="image">
+
                 </div>
                 <div class="card-footer text-end">
                     <button class="btn btn-primary" type="submit"><i class="fas fa-plus"></i> Créer la marque</button>

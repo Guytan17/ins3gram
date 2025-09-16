@@ -42,7 +42,6 @@ class Ingredient extends BaseController
     {
         $im = Model('IngredientModel');
         $data = $this->request->getPost();
-        print_r($data);die;
         if(empty($data['id_brand']))unset($data['id_brand']);
         if ($im->insert($data)) {
             $this->success('L\'ingrédient a été ajouté avec succès');
@@ -78,5 +77,20 @@ class Ingredient extends BaseController
             endforeach;
         }
         return $this->redirect('/admin/ingredient');
+    }
+    public function delete(){
+        $im = Model('IngredientModel');
+        $id = $this->request->getPost('id');
+        if ($im->delete($id)) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'L\'ingrédient a bien été supprimé !',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $bm->errors()
+            ]);
+        }
     }
 }

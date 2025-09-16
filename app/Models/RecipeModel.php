@@ -89,7 +89,7 @@ class RecipeModel extends Model
     {
         return $this->builder()
             ->where('id', $id)
-            ->update(['deleted_at' => null, 'updated_at' => date('Y-m-d H:i:s')]);
+            ->update(['deleted_at' => null]);
     }
 }
 

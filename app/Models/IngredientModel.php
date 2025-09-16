@@ -17,13 +17,29 @@ class IngredientModel extends Model
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = ['name', 'description', 'id_brand', 'id_categ'];
-    protected $validationRules = [
-        'name'      => 'required|max_length[255]|is_unique[ingredient.name,id,{id}]',
-        'description' => 'permit_empty|string',
-        'id_categ'  => 'permit_empty|integer',
-        'id_brand'  => 'permit_empty|integer',
-    ];
+    protected $beforeInsert = ['setInsertValidationRules'];
+    protected $beforeUpdate = ['setUpdateValidationRules'];
 
+    protected function setInsertValidationRules(array $data){
+        $this->validationRules = [
+            'name'      => 'required|max_length[255]|is_unique[ingredient.name,id]',
+            'description' => 'permit_empty|string',
+            'id_categ'  => 'permit_empty|integer',
+            'id_brand'  => 'permit_empty|integer',
+        ];
+        return $data;
+    }
+
+    protected function setUpdateValidationRules(array $data){
+        $id = $data['data']['id_recipe'] ?? null;
+        $this->validationRules = [
+            'name'      => "required|max_length[255]|is_unique[ingredient.name,id,$id]",
+            'description' => 'permit_empty|string',
+            'id_categ'  => 'permit_empty|integer',
+            'id_brand'  => 'permit_empty|integer',
+        ];
+        return $data;
+    }
     protected $validationMessages = [
         'name' => [
             'required'   => 'Le nom de l’ingrédient est obligatoire.',

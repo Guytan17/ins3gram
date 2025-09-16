@@ -1,10 +1,11 @@
-<div class="min-height-page d-flex flex-row align-items-center">
+<div class="min-vh-100 d-flex flex-row align-items-center">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="clearfix">
                     <h1 class="float-start display-3 me-4">404</h1>
                     <h4 class="pt-3">Y'a rien frère (Cheh)</h4>
+                    <img src="<?= base_url('assets/img/logo-full-tristoune.png')?>">
                 </div>
                 <div class="input-group">
                     <a class="btn btn-primary" href="<?= base_url('/') ?>">Retour à l'accueil</a>
