@@ -22,6 +22,12 @@
         "url": "admin/tag",
         "icon": "<i class=\"nav-icon fas fa-tags\"></i>",
         "class": ""
+      },
+      "unit": {
+        "title": "Unités ",
+        "url": "admin/unit",
+        "icon": "<i class=\"nav-icon fas fa-ruler-horizontal\"></i>",
+        "class": ""
       }
     }
   },

@@ -19,6 +19,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
         $routes->post('delete','Tag::delete');
     });
 
+    $routes->group('unit',function($routes){
+        $routes->get('search','Unit::search');
+        $routes->get('/','Unit::index');
+        $routes->post('update','Unit::update');
+        $routes->post('insert','Unit::insert');
+        $routes->post('delete','Unit::delete');
+    });
+
     $routes->group('ingredient',function($routes){
         $routes->get('search','Ingredient::search');
         $routes->get('/','Ingredient::index');
@@ -27,10 +35,6 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
         $routes->post('insert','Ingredient::insert');
         $routes->post('update','Ingredient::update');
         $routes->post('delete','Ingredient::delete');
-    });
-
-    $routes->group('unit',function($routes){
-        $routes->get('search','Unit::search');
     });
 
     $routes->group('categ-ing',function($routes){
