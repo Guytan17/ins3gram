@@ -28,4 +28,55 @@ class Unit extends BaseController
         // Réponse JSON
         return $this->response->setJSON($result);
     }
+    public function index() {
+        helper('form');
+        return $this->view('admin/unit');
+    }
+
+    public function insert() {
+        $um = Model('UnitModel');
+        $data=$this->request->getPost();
+        if($um->insert($data)) {
+            $this->success ("L'unité a bien été crée !");
+        } else {
+            foreach ($um->errors() as $key => $error) {
+                $this->error($error . "[" . $key . "]");
+            }
+        }
+        return $this->redirect('admin/unit');
+    }
+
+    public function update() {
+        $um = Model('UnitModel');
+        $data=$this->request->getPost();
+        $id=$data['id'];
+        unset($data['id']);
+        if ($um->update($id, $data)) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'L\'unité a été modifiée avec succès !',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $um->errors()
+            ]);
+        }
+    }
+
+    public function delete() {
+        $um = Model('UnitModel');
+        $id = $this->request->getPost('id');
+        if ($um->delete($id)) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'L\'unité a bien été supprimée !',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $um->errors()
+            ]);
+        }
+    }
 }
