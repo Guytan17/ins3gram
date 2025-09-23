@@ -22,6 +22,12 @@ class Recipe extends Migration
                 'unique'=>true,
                 'null'=>false
             ],
+            'slug' =>[
+                'type'=>'VARCHAR',
+                'constraint' => '255',
+                'unique'=>true,
+                'null'=>false,
+            ],
             'description'=>[
                 'type'=>'text',
                 'null'=>true,
