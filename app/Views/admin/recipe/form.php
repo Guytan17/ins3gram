@@ -1,8 +1,8 @@
 <?php
 if(!isset($recipe)) :
-    echo form_open('/admin/recipe/insert');
+    echo form_open_multipart('/admin/recipe/insert');
 else:
-    echo form_open('/admin/recipe/update'); ?>
+    echo form_open_multipart('/admin/recipe/update'); ?>
     <input type="hidden" name="id_recipe" value="<?= $recipe['id']; ?>">
 <?php
 endif;
@@ -10,15 +10,25 @@ endif;
 <div class="row mb-3">
     <div class="col">
         <div class="card">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div class="flex-fill me-3">
-                    <input type="text" class="form-control" id="name" placeholder="Nom de la recette" name="name" value="<?= isset($recipe) ? $recipe['name'] : '' ?>" required>
+            <div class="card-body ">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="flex-fill me-3">
+                        <input type="text" class="form-control" id="name" placeholder="Nom de la recette" name="name" value="<?= isset($recipe) ? $recipe['name'] : '' ?>" required>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchActive" name="active" <?= isset($recipe) && $recipe['deleted_at'] ? '': 'checked'; ?> >
+                        <label class="form-check-label" for="switchActive">Active</label>
+                    </div>
                 </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchActive" name="active" <?= isset($recipe) && $recipe['deleted_at'] ? '': 'checked'; ?> >
-                    <label class="form-check-label" for="switchActive">Active</label>
+                <?php if(isset($recipe)): ?>
+                <div class="ms-4">
+                    <a href="<?= base_url('/recette/' . $recipe['slug']); ?>" class="link-underline link-underline-opacity-0" target="_blank">
+                        Visionner la page front de la recette
+                    </a>
                 </div>
+                <?php endif; ?>
             </div>
+
         </div>
     </div>
 </div>
@@ -31,6 +41,10 @@ endif;
                 <ul class="nav nav-tabs" id="tabsRecipe">
                     <li class="nav-item">
                         <a href="#" class="nav-link active" data-bs-toggle="tab" data-bs-target="#general-tab-pane">Général</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-bs-toggle="tab" data-bs-target="#image-tab-pane">Images <span id="badge-image" class="badge rounded-pill text-bg-primary"><?= (isset
+                                ($recipe['images'])) ? count($recipe['images']) : '0' ;?></span></a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-bs-toggle="tab" data-bs-target="#ingredient-tab-pane">Ingrédients <span id="badge-ingredient" class="badge rounded-pill text-bg-primary"><?= (isset($recipe['ingredients'])) ? count($recipe['ingredients']) : '0' ;?></span></a>
@@ -69,6 +83,31 @@ endif;
                         </div>
                     </div>
                     <!--END:GENERAL -->
+                    <!--START:IMAGES -->
+                    <div class="tab-pane fade " id="image-tab-pane" role="tabpanel">
+                        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+                            <?php if(isset($recipe['images'])):
+                                foreach($recipe['images'] as $image) : ?>
+                                <div class="col">
+                                    <div class="position-relative img-hover-delete">
+                                        <div class="position-absolute img-thumbnail" style="width: 100%;height: 100%;background-color:rgb(0,0,0,0.4); display:none;">
+                                            <div class="d-flex justify-content-center align-items-center" style="height:100%">
+                                                <a href="" class="btn btn-danger text-light delete-img" data-id="<?= $image['id'] ?>">
+                                                    <i class="fas fa-trash-alt"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </div>
+                                    <img class="img-thumbnail" src="<?=base_url($image['file_path'])?>">
+                                    </div>
+                                </div>
+                                <?php endforeach;
+                            endif;?>
+                        </div>
+                        <div>
+                            <input type="file" name="images[]" class="form-control mt-2" multiple>
+                        </div>
+                    </div>
+                    <!--END:IMAGES -->
                     <!--START: INGREDIENTS -->
                     <div class="tab-pane fade" id="ingredient-tab-pane" role="tabpanel">
                         <div class="mb-3">
@@ -188,6 +227,36 @@ endif;
                 <div class="d-grid mb-3">
                    <button type="submit" class="btn btn-primary">Valider</button>
                 </div>
+                <?php if (isset($recipe)) : ?>
+                <div class="ms-2 mb-3">
+                    <?php
+                    // On part du principe que ta BDD stocke les dates en UTC
+                    $createdAt = new DateTime($recipe['created_at'], new DateTimeZone('UTC'));
+                    $updatedAt = new DateTime($recipe['updated_at'], new DateTimeZone('UTC'));
+
+                    // On convertit en heure française
+                    $createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
+                    $updatedAt->setTimezone(new DateTimeZone('Europe/Paris'));
+
+                    // On prépare un formateur de date en français
+                    $fmt = new IntlDateFormatter(
+                        'fr_FR',                   // langue FR
+                        IntlDateFormatter::LONG,   // format de la date (ex: "16 septembre 2025")
+                        IntlDateFormatter::SHORT,  // format de l'heure (ex: "20:15")
+                        'Europe/Paris'             // fuseau horaire
+                    );
+                    ?>
+
+                    <div>
+                        <span class="fw-bold">Créée le: </span>
+                        <?= $fmt->format($createdAt) ?>
+                    </div>
+                    <div>
+                        <span class="fw-bold">Modifiée le: </span>
+                        <?= $fmt->format($updatedAt) ?>
+                    </div>
+
+                </div>
                 <?php if (isset($recipe)) :  ?>
                     <div class="ms-2 mb-3">
                         <div>
@@ -213,6 +282,15 @@ endif;
                     <select class="form-select" id="id_user" name="id_user">
                         <option value="<?= $id ?>" selected><?= $username ?></option>
                     </select>
+                </div>
+                <div class="mt-3">
+                    <label for="mea" class="form-label">Image Principale</label>
+                    <?php if (isset($recipe['mea']) && !empty($recipe['mea'])) : ?>
+                        <div class="text-center mb-3 ">
+                            <img class="img-thumbnail" src="<?= base_url($recipe['mea']['file_path']); ?>" >
+                        </div>
+                    <?php endif; ?>
+                    <input id="mea" type="file" name="mea" class="form-control">
                 </div>
             </div>
         </div>
@@ -279,7 +357,7 @@ endif;
         reorganizeStepsNumbers();
         $('#badge-step').html(parseInt($('#badge-step').html())-1);
     })
-        //Action du clique sur l'ajout d'une étape
+        //Action du clic sur l'ajout d'une étape
         $('#add-step').on('click', function() {
         cpt_step++;
         $('#badge-step').html(parseInt($('#badge-step').html())+1);
@@ -308,32 +386,46 @@ endif;
     });
         //Action de la recherche de mot clés
         $('#search-tag').on('input', function() {
-        let search = $(this).val().toLowerCase();
-        $('.tag').each(function () {
-        let tagText = $(this).find('label').text().toLowerCase();
-        if(tagText.includes(search)) {
-        $(this).show();
-    } else {
-        $(this).hide();
-    }
-    });
+            let search = $(this).val().toLowerCase();
+            $('.tag').each(function () {
+            let tagText = $(this).find('label').text().toLowerCase();
+            if (tagText.includes(search)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     });
         //Action sur la selection d'un mot clés
         $('.tag .form-check-input').on('change', function() {
-        let badge = $('#badge-tag');
-        if($(this).is(':checked')) {
-        badge.html(parseInt(badge.html()) + 1);
-    } else {
-        badge.html(parseInt(badge.html()) - 1);
-    }
-    });
+            let badge = $('#badge-tag');
+            if($(this).is(':checked')) {
+            badge.html(parseInt(badge.html()) + 1);
+            } else {
+                badge.html(parseInt(badge.html()) - 1);
+            }
+        });
+
+        //Action sur le survol d'une image
+        $('.img-hover-delete').on('mouseenter mouseleave', function(){
+            $(this).find('.position-absolute').fadeToggle('fast');
+        });
+        //Action sur le bouton de suppression d'une image
+        $('.delete-img').on('click', function (e) {
+            e.preventDefault();
+            let id =$(this).data('id');
+            let $col =$(this).closest('.col');
+            $col.hide();
+            $col.append(`<input type="hidden" name="delete-img[]" value="${id}">`);
+            $('#badge-image').html(parseInt($('#badge-image').html()) - 1);
+        });
         //Ajout de SELECT2 à notre select user
         initAjaxSelect2('#id_user', {
         url: baseUrl + 'admin/user/search',
         placeholder: 'Rechercher un utilisateur...',
         searchFields: 'username',
         delay: 250
-    });
+        });
         //Initialisation dés le départ de nos Select pour ingrédient
         initAjaxSelect2('#zone-ingredients .select-ingredient', {
         url: baseUrl + 'admin/ingredient/search',
