@@ -43,37 +43,48 @@
                         </div>
                     </div>
                     <!-- Sélection de la marque et de la catégorie -->
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select class="form-select" name="id_brand" id="id_brand">
-                                <option value="">Pas de marque</option>
-                                <?php if(isset($brands) && is_array($brands)) :
-                                foreach ($brands as $brand): ?>
-                                    <option value="<?=$brand['id']?>"
-                                        <?= (isset($ingredient) && $ingredient['id_brand']==$brand['id'])||set_value('id_brand') == $brand['id']? 'selected' : ''?>
-                                    >
-                                        <?=esc($brand['name'])?>
-                                    </option>
-                                <?php endforeach;
-                                endif;?>
-                            </select>
-                            <label for="brand">Marque de l'ingrédient</label>
+                    <div class="row g-3">
+                        <div class="col-md-6" id="zone-brand">
+                            <div>
+                                <select class="form-select select-brand" name="id_brand" id="id_brand">
+                                    <option value=""></option>
+                                    <?php if(isset($ingredient['id_brand'])) { ?>
+                                        <option value="<?= $ingredient['id_brand']?>" selected><?= $ingredient['id_brand']?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="zone-categ">
+                            <div>
+                                <select class="form-select select-categ" name="id_categ" id="id_categ" required>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select class="form-select" name="id_categ" id="id_categ" required>
-                                <?php if(isset($categories) && is_array($categories)) :
-                                    foreach ($categories as $category): ?>
-                                        <option value="<?=($category['id'])?>"
-                                        <?= (isset($ingredient) && $ingredient['id_categ']==$category['id'])||set_value('id_categ') == $category['id']? 'selected' : ''?>
-                                        >
-                                            <?=esc($category['name'])?>
-                                        </option>
-                                    <?php endforeach;
-                                endif;?>
-                            </select>
-                            <label for="brand">Catégorie de l'ingrédient</label>
+                    <!-- Sélection des substituts -->
+                    <div class="row g-3">
+                        <div class="col-md-6" id="zone-substitute">
+                            <div class="tab-pane" id="substitute-tab-pane" role="tabpanel">
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            Liste des ingrédients qui substituent: <?= $ingredient['name']?>
+                                        </div>
+                                        <div class="card-body">
+                                            <?php
+
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                    <span class="btn btn-primary " id="add-substitute">
+                                        <i class="fas fa-plus"></i> Ajouter un substitut
+                                    </span>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            ingrédients que l'ingrédient actuel substituent
+
                         </div>
                     </div>
                 </div>
@@ -154,4 +165,60 @@
             }, false); // "false" signifie qu’on utilise le mode "bulle" par défaut pour l’événement
         });
     })();
+    //Compteur pour nos substituts
+    let cpt_sub = $('#zone-substitute .card-body .row-substitute').length;
+    //url pour les requetes Ajax
+    baseUrl = "<?= base_url(); ?>";
+    //Action du clic sur l'ajout d'un subsitut
+    $('#add-substitute').on('click', function () {
+        cpt_sub++; //augmente le compteur de 1
+        let row = `
+                    <div class="row mb-3 row-substitute">
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-trash-alt text-danger supp-substitute"></i>
+                                </span>
+                                <select class="form-select flex-fill select-susbtitute" name="substitute[${cpt_sub}][id_ingredient]">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        $('#zone-substitute .card-body').append(row);
+        initAjaxSelect2('#zone-substitute .select-substitute', {
+            url: baseUrl + 'admin/ingredient/search',
+            placeholder: 'Rechercher un ingrédient...',
+            searchFields: 'name,description',
+            showDescription: true,
+            delay: 250
+        });
+
+    });
+    //Initialisation dès le départ de nos Select pour substitut
+    initAjaxSelect2('#zone-substitute .select-substitute', {
+        url: baseUrl + 'admin/ingredient/search',
+        placeholder: 'Rechercher un ingrédient...',
+        searchFields: 'name,description',
+        showDescription: true,
+        delay: 250
+    });
+
+    //Champ de sélection pour la marque
+    initAjaxSelect2('#zone-brand .select-brand', {
+        url: baseUrl + 'admin/brand/search',
+        placeholder: 'Rechercher une marque...',
+        searchFields: 'name,description',
+        showDescription: true,
+        delay: 250,
+        allowClear:true // permet de ne rien sélectionner
+    });
+
+    initAjaxSelect2('#zone-categ .select-categ', {
+        url: baseUrl + 'admin/categ-ing/search',
+        placeholder: 'Rechercher une catégorie...',
+        searchFields: 'name',
+        showDescription: true,
+        delay: 250,
+    });
 </script>

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Select2Searchable;
 use CodeIgniter\Model;
 use App\Traits\DataTableTrait;
 
 class BrandModel extends Model
 {
     use DataTableTrait;
+    use Select2Searchable;
+
     protected $table            = 'brand';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
@@ -25,15 +28,24 @@ class BrandModel extends Model
             'is_unique'=>'Cette marque existe déjà.',
         ],
     ];
+    protected $select2SearchFields= ['name','description'];
+    protected $select2DisplayField='name';
+    protected $select2AdditionalFields=['description'];
     protected function getDataTableConfig(): array
     {
         return [
             'searchable_fields' => [
-                'name',
-                'id',
+                'brand.name',
+                'brand.id',
             ],
-            'joins' => [],
-            'select' => '*',
+            'joins' => [
+                [
+                    'table' => 'media',
+                    'condition' => 'brand.id = media.entity_id AND media.entity_type = \'brand\'',
+                    'type' => 'left'
+                ]
+            ],
+            'select' => 'brand.*, media.file_path as image_url',
         ];
     }
 }

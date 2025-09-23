@@ -89,7 +89,7 @@ class Ingredient extends BaseController
         } else {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => $bm->errors()
+                'message' => $im->errors()
             ]);
         }
     }

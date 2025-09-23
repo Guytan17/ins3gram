@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Select2Searchable;
 use CodeIgniter\Model;
 use App\Traits\DataTableTrait;
 
 class CategIngModel extends Model
 {
     use DataTableTrait;
+    use Select2Searchable;
     protected $table            = 'categ_ing';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
@@ -45,6 +47,8 @@ class CategIngModel extends Model
             'integer' => 'L’ID du parent doit être un nombre.',
         ],
     ];
+    protected $select2SearchFields= ['name'];
+    protected $select2DisplayField='name';
     protected function getDataTableConfig(): array
     {
         return [
