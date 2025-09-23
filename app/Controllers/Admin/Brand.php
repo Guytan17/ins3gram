@@ -75,4 +75,29 @@ class Brand extends BaseController
             ]);
         }
     }
+
+    public function search()
+    {
+        $request = $this->request;
+
+        // Vérification AJAX
+        if (!$request->isAJAX()) {
+            return $this->response->setJSON(['error' => 'Requête non autorisée']);
+        }
+
+        $bm = Model('BrandModel');
+
+        // Paramètres de recherche
+        $search = $request->getGet('search') ?? '';
+        $page = (int)($request->getGet('page') ?? 1);
+        $limit = 20;
+
+        // Utilisation de la méthode du Model (via le trait)
+        $result = $bm->quickSearchForSelect2($search, $page, $limit);
+
+        // Réponse JSON
+        return $this->response->setJSON($result);
+    }
+
+
 }
