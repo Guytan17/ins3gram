@@ -14,11 +14,6 @@ $(document).ready(function () {
         }
     });
 });
-const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
 
 /**
  * Initialise un Select2 avec recherche AJAX générique
@@ -47,7 +42,7 @@ function initAjaxSelect2(selector, options) {
         url: '',                     // URL pour la recherche AJAX (OBLIGATOIRE)
         searchFields: '',            // Champs à rechercher (optionnel, pour info)
         cache: true,                 // Met en cache les résultats pour éviter les requêtes répétées
-        showDescription: false        // Affiche ou non la description dans les résultats
+        showDescription: false       // Affiche ou non la description dans les résultats
     };
 
     // Fusion de la configuration par défaut avec les options personnalisées
@@ -113,7 +108,7 @@ function initAjaxSelect2(selector, options) {
          * @param {object} item - Un élément du tableau results
          * @returns {jQuery|string} - HTML à afficher
          */
-        templateResult: function (item) {
+        templateResult: function(item) {
             // Pendant le chargement, afficher le texte de chargement
             if (item.loading) {
                 return item.text;
@@ -143,17 +138,18 @@ function initAjaxSelect2(selector, options) {
          * @param {object} item - L'élément sélectionné
          * @returns {string} - Texte à afficher dans le select
          */
-        templateSelection: function (item) {
+        templateSelection: function(item) {
             // On affiche seulement le nom/titre
             return item.text || 'Sélection sans nom';
         }
     });
 
     // Confirmation en console (pour le développement)
-    console.log('Select2 initialisé sur :', selector, 'avec URL :', config.url);
+    //console.log('Select2 initialisé sur :', selector, 'avec URL :', config.url);
 
     return true; // Succès
 }
+
 function initTinymce(selector) {
     tinymce.init({
         selector: selector,
@@ -163,6 +159,7 @@ function initTinymce(selector) {
         plugins: [
             'preview', 'code', 'fullscreen','wordcount', 'link','lists',
         ],
+        license_key: 'gpl',
         skin: 'oxide',
         content_encoding: 'text',
         toolbar: 'undo redo | formatselect | ' +

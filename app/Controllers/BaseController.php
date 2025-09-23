@@ -196,7 +196,7 @@ abstract class BaseController extends Controller
      */
     public function error($txt)
     {
-        log_message('debug', $txt);
+        log_message('error', $txt);
         $this->messages[] = ['txt' => $txt, 'class' => 'alert-danger', 'toast' => 'error'];
     }
     /**

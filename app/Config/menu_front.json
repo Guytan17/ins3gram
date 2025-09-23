@@ -1,8 +1,8 @@
 {
-  "accueil": {
-    "title": "Tableau de Bord",
-    "url": "/admin/dashboard",
-    "icon": "<i class=\"nav-icon fa-solid fa-house\"></i>",
+  "recettes": {
+    "title": "Recettes",
+    "url": "/recette",
+    "icon": "<i class=\"nav-icon fas fa-martini-glass\"></i>",
     "class": "main-menu-accueil"
   },
   "administration": {
