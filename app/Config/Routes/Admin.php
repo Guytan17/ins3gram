@@ -39,6 +39,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
 
     $routes->group('categ-ing',function($routes){
         $routes->get('/','CategIng::index');
+        $routes->get('search','CategIng::search');
         $routes->post('insert','CategIng::insert');
         $routes->post('update','CategIng::update');
         $routes->post('delete','CategIng::delete');
@@ -46,6 +47,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
 
     $routes->group('brand',function($routes){
         $routes->get('/','Brand::index');
+        $routes->get('search','Brand::search');
         $routes->post('insert','Brand::insert');
         $routes->post('update','Brand::update');
         $routes->post('delete','Brand::delete');

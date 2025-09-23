@@ -27,7 +27,7 @@ class Recipe extends BaseController
         $rm = Model('RecipeModel');
 
         //Ajout de ma recette + récupération de l'ID de ma recette ajouté
-        if($id_recipe = $rm->insert($data, true)){
+        if ($id_recipe = $rm->insert($data,  true)) {
             $this->success('Recette créée avec succès !');
             //Gestion activation / désactivation
             if (!isset($data['active'])) {
@@ -80,6 +80,42 @@ class Recipe extends BaseController
                     }
                 }
             }
+
+            //images mea
+            $mea = $this->request->getFile('mea');
+            if($mea && $mea->getError() !== UPLOAD_ERR_NO_FILE){
+                $mediaData = [
+                    'entity_type' => 'recipe_mea',
+                    'entity_id' => $id_recipe,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                $uploadResult = upload_file($mea, 'recipe/.$id_recipe', $mea->getName(), $mediaData,false);
+                // Vérifier le résultat de l'upload
+                if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                    // Afficher un message d'erreur détaillé
+                    $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
+                }
+            }
+
+            //gestion des images
+            $images = $this->request->getFiles()['images'];
+            foreach ($images as $image) {
+                if($image && $image->getError() !== UPLOAD_ERR_NO_FILE){
+                    $mediaData = [
+                        'entity_type' => 'recipe',
+                        'entity_id' => $id_recipe,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                    $uploadResult = upload_file($image, 'recipe/'.$id_recipe, $image->getName(), $mediaData,true);
+                    // Vérifier le résultat de l'upload
+                    if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                        // Afficher un message d'erreur détaillé
+                        $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
+                    }
+                }
+            }
         } else {
             foreach($rm->errors() as $error){
                 $this->error($error);
@@ -91,23 +127,16 @@ class Recipe extends BaseController
         helper('form');
         $this->addBreadcrumb('Recettes', "/admin/recipe");
         $this->addBreadcrumb('Modification d\'une recette', "");
-        $recipe = Model('RecipeModel')->withDeleted()->find($id_recipe);
+        //Récupérer les informations de la recette (mêmes désactivée)
+        $recipe = Model('RecipeModel')->getFullRecipe($id_recipe);
+        // Si je n'ai pas de recette je l'indique et redirige
         if(!$recipe) {
             $this->error('Recette introuvable');
             return $this->redirect('/admin/recipe');
         }
-        $user = Model('UserModel')->withDeleted()->find($recipe['id_user']);
-        unset($recipe['id_user']);
-        $recipe['user'] = $user;
-        $ingredients = Model('QuantityModel')->getQuantityByRecipe($id_recipe);
+        //Récupération des mots clés (pour les afficher dans l'onglet)
         $tags = Model('TagModel')->findAll();
-        $recipe['ingredients'] = $ingredients;
-        $recipe_tags = Model('TagRecipeModel')->where('id_recipe',$id_recipe)->findAll();
-        foreach($recipe_tags as $recipe_tag) {
-            $recipe['tags'][] = $recipe_tag['id_tag'];
-        }
-        $steps = Model('StepModel')->where('id_recipe',$id_recipe)->orderBy('order', 'ASC')->findAll();
-        $recipe['steps'] = $steps;
+        //Affichage de la vue avec les mots clés et la recette complète en variable envoyés
         return $this->view('admin/recipe/form', ['tags' => $tags,'recipe' => $recipe]);
     }
     public function update() {
@@ -214,13 +243,50 @@ class Recipe extends BaseController
                         }
                     }
                 }
-            } else {
-
+            }
+            //images mea
+            $mea = $this->request->getFile('mea');
+            if($mea && $mea->getError() !== UPLOAD_ERR_NO_FILE){
+                $mediaData = [
+                    'entity_type' => 'recipe_mea',
+                    'entity_id' => $id_recipe,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                $uploadResult = upload_file($mea, 'recipe/'.$id_recipe, $mea->getName(), $mediaData,false);
+                // Vérifier le résultat de l'upload
+                if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                    // Afficher un message d'erreur détaillé
+                    $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
+                }
+            }
+            $images=$this->request->getFiles()['images'];
+            foreach($images as $image) {
+                if($image &&$image->getError() !== UPLOAD_ERR_NO_FILE){
+                    $mediaData = [
+                        'entity_type' => 'recipe',
+                        'entity_id' => $id_recipe,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                    $uploadResult = upload_file($image, 'recipe/'.$id_recipe, $image->getName(), $mediaData,true);
+                    // Vérifier le résultat de l'upload
+                    if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                        // Afficher un message d'erreur détaillé
+                        $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
+                    }
+                }
             }
 
-
-        }
-        else {
+            //suppression des images
+            if(isset($data['delete-img'])) {
+                $mediaModel = Model('MediaModel');
+                foreach ($data['delete-img'] as $id_img) {
+                    // $mediaModel->delete($id_img); //suppression uniquement de la BDD
+                    $mediaModel->deleteMedia($id_img); //suppression BDD + physique
+                }
+            }
+        } else {
             foreach($rm->errors() as $error){
                 $this->error($error);
             }
