@@ -257,15 +257,6 @@ endif;
                     </div>
 
                 </div>
-                <?php if (isset($recipe)) :  ?>
-                    <div class="ms-2 mb-3">
-                        <div>
-                            <span class="fw-bold">Créée le: </span><?= $recipe['created_at'] ?>
-                        </div>
-                        <div>
-                            <span class="fw-bold">Modifiée le: </span><?= $recipe['updated_at'] ?>
-                        </div>
-                    </div>
                 <?php endif; ?>
                 <div>
                     <?php
@@ -299,7 +290,7 @@ endif;
 </div>
 <?php echo form_close(); ?>
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
         //Activation de TinyMCE
         initTinymce("#description");
         initTinymce("#zone-steps textarea");
@@ -313,9 +304,9 @@ endif;
 
         //Action du clique sur l'ajout d'un ingrédient
         $('#add-ingredient').on('click', function () {
-        cpt_ing++; //augmente le compteur de 1
-        $('#badge-ingredient').html(parseInt($('#badge-ingredient').html())+1);
-        let row = `
+            cpt_ing++; //augmente le compteur de 1
+            $('#badge-ingredient').html(parseInt($('#badge-ingredient').html())+1);
+            let row = `
                 <div class="row mb-3 row-ingredient">
                     <div class="col">
                         <div class="input-group">
@@ -331,71 +322,71 @@ endif;
                     </div>
                 </div>
             `;
-        $('#zone-ingredients').append(row);
-        initAjaxSelect2('#zone-ingredients .row-ingredient:last-child .select-ingredient', {
-        url: baseUrl + 'admin/ingredient/search',
-        placeholder: 'Rechercher un ingrédient...',
-        searchFields: 'name,description',
-        showDescription: true,
-        delay: 250
-    });
-        initAjaxSelect2('#zone-ingredients .row-ingredient:last-child .select-unit', {
-        url: baseUrl + 'admin/unit/search',
-        placeholder: 'Rechercher une unité...',
-        searchFields: 'name',
-        delay: 250
-    });
-    });
+            $('#zone-ingredients').append(row);
+            initAjaxSelect2('#zone-ingredients .row-ingredient:last-child .select-ingredient', {
+                url: baseUrl + 'admin/ingredient/search',
+                placeholder: 'Rechercher un ingrédient...',
+                searchFields: 'name,description',
+                showDescription: true,
+                delay: 250
+            });
+            initAjaxSelect2('#zone-ingredients .row-ingredient:last-child .select-unit', {
+                url: baseUrl + 'admin/unit/search',
+                placeholder: 'Rechercher une unité...',
+                searchFields: 'name',
+                delay: 250
+            });
+        });
         //Action du bouton de suppression des ingrédients
         $('#zone-ingredients').on('click','.supp-ingredient',function() {
-        $(this).closest('.row-ingredient').remove();
-        $('#badge-ingredient').html(parseInt($('#badge-ingredient').html())-1);
-    });
+            $(this).closest('.row-ingredient').remove();
+            $('#badge-ingredient').html(parseInt($('#badge-ingredient').html())-1);
+        });
         //Action du bouton de suppression des étapes
         $('#zone-steps').on('click', '.supp-step', function() {
-        $(this).closest('.accordion-item').remove();
-        reorganizeStepsNumbers();
-        $('#badge-step').html(parseInt($('#badge-step').html())-1);
-    })
+            $(this).closest('.accordion-item').remove();
+            reorganizeStepsNumbers();
+            $('#badge-step').html(parseInt($('#badge-step').html())-1);
+        })
         //Action du clic sur l'ajout d'une étape
         $('#add-step').on('click', function() {
-        cpt_step++;
-        $('#badge-step').html(parseInt($('#badge-step').html())+1);
-        $("#zone-steps .accordion-button").addClass('collapsed');
-        $("#zone-steps .show").removeClass('show');
-        let step = `
-            <div class="accordion-item">
-                <h2 class="accordion-header d-flex">
-                  <i class="fas fa-arrows-up-down fa-2xs sort-handle align-self-center p-3"></i>
-                  <button class="accordion-button flex-fill" data-bs-toggle="collapse" data-bs-target="#step-${cpt_step}" type="button">
-                    Étape #${cpt_step}
-                  </button>
-                </h2>
-                <div id="step-${cpt_step}" class="accordion-collapse collapse show" data-bs-parent="#zone-steps">
-                  <div class="accordion-body">
-                    <textarea class="form-control" id="steptextarea-step-${cpt_step}" name='steps[${cpt_step}][description]'></textarea>
-                        <div class="d-flex justify-content-end mt-3">
-                            <i title="Supprimer l'étape" class="fas fa-xl fa-trash-alt text-danger supp-step"></i>
+            cpt_step++;
+            $('#badge-step').html(parseInt($('#badge-step').html())+1);
+            $("#zone-steps .accordion-button").addClass('collapsed');
+            $("#zone-steps .show").removeClass('show');
+            let step = `
+                <div class="accordion-item">
+                    <h2 class="accordion-header d-flex">
+                        <i class="fas fa-arrows-up-down fa-2xs sort-handle align-self-center p-3"></i>
+                        <button class="accordion-button flex-fill" data-bs-toggle="collapse" data-bs-target="#step-${cpt_step}" type="button">
+                            Étape #${cpt_step}
+                        </button>
+                    </h2>
+                    <div id="step-${cpt_step}" class="accordion-collapse collapse show" data-bs-parent="#zone-steps">
+                        <div class="accordion-body">
+                            <textarea class="form-control" id="steptextarea-step-${cpt_step}" name='steps[${cpt_step}][description]'></textarea>
+                            <div class="d-flex justify-content-end mt-3">
+                                <i title="Supprimer l'étape" class="fas fa-xl fa-trash-alt text-danger supp-step"></i>
+                            </div>
                         </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
             `;
-        $('#zone-steps').append(step);
-        initTinymce("#steptextarea-step-"+cpt_step);
-    });
+            $('#zone-steps').append(step);
+            initTinymce("#steptextarea-step-"+cpt_step);
+        });
         //Action de la recherche de mot clés
         $('#search-tag').on('input', function() {
             let search = $(this).val().toLowerCase();
             $('.tag').each(function () {
-            let tagText = $(this).find('label').text().toLowerCase();
-            if (tagText.includes(search)) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
+                let tagText = $(this).find('label').text().toLowerCase();
+                if (tagText.includes(search)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
         });
-    });
         //Action sur la selection d'un mot clés
         $('.tag .form-check-input').on('change', function() {
             let badge = $('#badge-tag');
@@ -421,71 +412,71 @@ endif;
         });
         //Ajout de SELECT2 à notre select user
         initAjaxSelect2('#id_user', {
-        url: baseUrl + 'admin/user/search',
-        placeholder: 'Rechercher un utilisateur...',
-        searchFields: 'username',
-        delay: 250
+            url: baseUrl + 'admin/user/search',
+            placeholder: 'Rechercher un utilisateur...',
+            searchFields: 'username',
+            delay: 250
         });
         //Initialisation dés le départ de nos Select pour ingrédient
         initAjaxSelect2('#zone-ingredients .select-ingredient', {
-        url: baseUrl + 'admin/ingredient/search',
-        placeholder: 'Rechercher un ingrédient...',
-        searchFields: 'name,description',
-        showDescription: true,
-        delay: 250
-    });
+            url: baseUrl + 'admin/ingredient/search',
+            placeholder: 'Rechercher un ingrédient...',
+            searchFields: 'name,description',
+            showDescription: true,
+            delay: 250
+        });
         initAjaxSelect2('#zone-ingredients .select-unit', {
-        url: baseUrl + 'admin/unit/search',
-        placeholder: 'Rechercher une unité...',
-        searchFields: 'name',
-        delay: 250
-    });
+            url: baseUrl + 'admin/unit/search',
+            placeholder: 'Rechercher une unité...',
+            searchFields: 'name',
+            delay: 250
+        });
         // Rendre les étapes réordonnables
         $('#zone-steps').sortable({
-        handle: '.sort-handle',
-        placeholder: 'ui-state-highlight',
-        cursor: 'move',
-        opacity: 0.8,
-        axis: 'y',
-        containment: '#zone-steps',
-        tolerance: 'pointer',
+            handle: '.sort-handle',
+            placeholder: 'ui-state-highlight',
+            cursor: 'move',
+            opacity: 0.8,
+            axis: 'y',
+            containment: '#zone-steps',
+            tolerance: 'pointer',
 
-        helper: function(e, ui) {
-        $("#zone-steps .accordion-collapse.show").removeClass('show');
-        $("#zone-steps .accordion-button").addClass('collapsed');
+            helper: function(e, ui) {
+                $("#zone-steps .accordion-collapse.show").removeClass('show');
+                $("#zone-steps .accordion-button").addClass('collapsed');
 
-        // Helper minimal pour éviter les conflits
-        let $helper = $('<div class="accordion-item" style="background: #f8f9fa; border: 2px dashed #007bff;"><div style="padding: 15px;">Déplacement de l\'étape...</div></div>');
-        return $helper;
-    },
+                // Helper minimal pour éviter les conflits
+                let $helper = $('<div class="accordion-item" style="background: #f8f9fa; border: 2px dashed #007bff;"><div style="padding: 15px;">Déplacement de l\'étape...</div></div>');
+                return $helper;
+            },
 
-        // Tout se passe après le stop pour éviter les perturbations
-        stop: function(event, ui) {
-        // Sauvegarder TinyMCE avant manipulations
-        $('#zone-steps textarea').each(function() {
-        let textareaId = $(this).attr('id');
-        let editor = tinymce.get(textareaId);
-        if (editor) {
-        editor.save();
-        editor.destroy();
-    }
-    });
+            // Tout se passe après le stop pour éviter les perturbations
+            stop: function(event, ui) {
+                // Sauvegarder TinyMCE avant manipulations
+                $('#zone-steps textarea').each(function() {
+                    let textareaId = $(this).attr('id');
+                    let editor = tinymce.get(textareaId);
+                    if (editor) {
+                        editor.save();
+                        editor.destroy();
+                    }
+                });
 
-        // Utiliser la fonction commune
-        reorganizeStepsNumbers();
+                // Utiliser la fonction commune
+                reorganizeStepsNumbers();
 
-        // Rouvrir l'accordéon déplacé
-        let $button = ui.item.find('.accordion-button');
-        let $collapse = ui.item.find('.accordion-collapse');
-        $button.removeClass('collapsed');
-        $collapse.addClass('show');
+                // Rouvrir l'accordéon déplacé
+                let $button = ui.item.find('.accordion-button');
+                let $collapse = ui.item.find('.accordion-collapse');
+                $button.removeClass('collapsed');
+                $collapse.addClass('show');
 
-        // Réinitialiser TinyMCE
-        setTimeout(() => {
-        initTinymce("#zone-steps textarea");
-    }, 200);
-    }
-    });
+                // Réinitialiser TinyMCE
+                setTimeout(() => {
+                    initTinymce("#zone-steps textarea");
+                }, 200);
+            }
+        });
         // Fonction commune pour réorganiser les numéros et attributs des étapes
         function reorganizeStepsNumbers() {
             let $items = $('#zone-steps .accordion-item');
@@ -522,7 +513,6 @@ endif;
                 }, index * 200);
             });
         }
-
     });
 </script>
 <style>

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class SubstituteModel extends Model
 {
     protected $table            = 'substitute';
-    protected $primaryKey       = null;
+    protected $primaryKey       = 'id_ingredient_base';
     protected $useAutoIncrement = false;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
@@ -15,7 +15,7 @@ class SubstituteModel extends Model
     protected $allowedFields    = ['id_ingredient_base','id_ingredient_sub'];
     protected $validationRules = [
         'id_ingredient_base' => 'required|integer',
-        'id_ingredient_sub'  => 'required|integer|different[id_ingredient_base]',
+        'id_ingredient_sub'  => 'required|integer|differs[id_ingredient_base]',
     ];
 
     protected $validationMessages = [
@@ -29,5 +29,19 @@ class SubstituteModel extends Model
             'different' => 'L’ingrédient substitut doit être différent de l’ingrédient de base.',
         ],
     ];
+
+    public function getSubByIdBase($id_ingredient_base){
+      $this->select('substitute.*,ingredient.name as sub_name');
+      $this->join('ingredient','ingredient.id=substitute.id_ingredient_sub');
+      $this->where('id_ingredient_base',$id_ingredient_base);
+      return $this->findAll();
+    }
+
+    public function getBaseByIdSub($id_ingredient_sub) {
+        $this->select('substitute.*,ingredient.name as base_name, ingredient.description as description');
+        $this->join('ingredient','ingredient.id=substitute.id_ingredient_base');
+        $this->where('id_ingredient_sub',$id_ingredient_sub);
+        return $this->findAll();
+    }
 
 }

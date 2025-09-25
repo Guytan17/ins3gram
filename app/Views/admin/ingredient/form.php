@@ -47,9 +47,8 @@
                         <div class="col-md-6" id="zone-brand">
                             <div>
                                 <select class="form-select select-brand" name="id_brand" id="id_brand">
-                                    <option value=""></option>
                                     <?php if(isset($ingredient['id_brand'])) { ?>
-                                        <option value="<?= $ingredient['id_brand']?>" selected><?= $ingredient['id_brand']?></option>
+                                        <option value="<?= $ingredient['id_brand']?>" selected><?= $brand['name']?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -57,42 +56,95 @@
                         <div class="col-md-6" id="zone-categ">
                             <div>
                                 <select class="form-select select-categ" name="id_categ" id="id_categ" required>
+                                    <?php if(isset($ingredient['id_categ'])) { ?>
+                                        <option value="<?= $ingredient['id_categ']?>" selected><?= $category['name']?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <!-- Sélection des substituts -->
+                    <!-- Partie substituts -->
                     <div class="row g-3">
+                    <!-- Sélection des substituts de l'ingrédient -->
                         <div class="col-md-6" id="zone-substitute">
                             <div class="tab-pane" id="substitute-tab-pane" role="tabpanel">
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            Liste des ingrédients qui substituent: <?= $ingredient['name']?>
-                                        </div>
-                                        <div class="card-body">
-                                            <?php
-
-                                            ?>
-                                        </div>
+                                <div class="card mb-2">
+                                    <div class="card-header">
+                                        <?php if(isset($ingredient)) : ?>
+                                        Ingrédients qui substituent <span class="bg-warning rounded px-1"><?=isset($ingredient['name']) ? $ingredient['name']: ""?></span> :
+                                        <?php else : ?>
+                                        Ingrédients qui le substitue :
+                                        <?php endif ; ?>
                                     </div>
-                                    <div class="text-end">
-                                    <span class="btn btn-primary " id="add-substitute">
-                                        <i class="fas fa-plus"></i> Ajouter un substitut
-                                    </span>
+                                    <div class="card-body">
+                                        <?php if(isset($substitutes)) :
+                                            $cpt_sub=0;
+                                            foreach ($substitutes as $sub) :
+                                                $cpt_sub++;
+                                                ?>
+                                                <div class="row mb-2 row-substitute">
+                                                    <div class="col">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">
+                                                                 <i class="fas fa-trash-alt text-danger supp-substitute"></i>
+                                                            </span>
+                                                            <select class="form-select flex-fill select-substitute" name="substitute[<?= $cpt_sub?>][id_ingredient_sub]">
+                                                                <option value="<?= $sub['id_ingredient_sub']?>"><?= $sub['sub_name']?></option>
+                                                            </select>
+                                                            <input type="hidden" name="substitute[<?= $cpt_sub?>][id_ingredient_base]" value="<?= $ingredient['id'] ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        <?php endforeach ;
+                                        endif ; ?>
                                     </div>
+                                    <div class="card-footer text-end">
+                                        <span class="btn btn-primary" id="add-substitute">
+                                            <i class="fas fa-plus"></i> Ajouter un substitut
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <?php if(isset($ingredient)){ ?>
+                                <!-- Affichage des ingrédients que celui-ci substituent -->
                         <div class="col-md-6">
-                            ingrédients que l'ingrédient actuel substituent
-
+                            <div class="card">
+                                <div class="card-header">
+                                    <?php if(!isset($ingredient['substituted'])) : ?>
+                                        Aucun ingrédient n'est substitué par<span class="bg-warning rounded mx-1 px-1"><?=$ingredient['name']?></span>
+                                    <?php else : ?>
+                                        Ingrédients substitués par <span class="bg-warning rounded mx-2"><?=$ingredient['name']?></span> :
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-4">Nom</th>
+                                            <th class="col-md-8">Description</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach($substituted as $subd ) : ?>
+                                            <tr>
+                                                <td><a href="<?= base_url('admin/ingredient/'.$subd['id_ingredient_base']) ?>"><?= $subd['base_name'] ?></a></td>
+                                                <td><?= $subd['description'] ?></td>
+                                            </tr>
+                                        <?php endforeach ; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
-            <div class="card-footer text-end">
+            <div class="card-footer text-end mt-2">
                 <?php if(!isset($ingredient)):?>
                     <button type="reset" class="btn btn-outline-secondary me-2">
-                        <i class="fas fa-undo me-1"></i>Réinitialiser
+                        <i class="fas fa-undo me-1"></i> Réinitialiser
                     </button>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-plus me-1"></i> Créer l'ingrédient
@@ -173,14 +225,16 @@
     $('#add-substitute').on('click', function () {
         cpt_sub++; //augmente le compteur de 1
         let row = `
+
                     <div class="row mb-3 row-substitute">
                         <div class="col">
                             <div class="input-group">
                                 <span class="input-group-text">
                                     <i class="fas fa-trash-alt text-danger supp-substitute"></i>
                                 </span>
-                                <select class="form-select flex-fill select-susbtitute" name="substitute[${cpt_sub}][id_ingredient]">
+                                <select class="form-select flex-fill select-substitute" name="substitute[${cpt_sub}][id_ingredient_sub]">
                                 </select>
+                                <input type="hidden" name="substitute[${cpt_sub}][id_ingredient_base]" value="<?=(isset($ingredient['id'])) ? ($ingredient['id']) : $next_id ?>">
                             </div>
                         </div>
                     </div>
@@ -193,7 +247,10 @@
             showDescription: true,
             delay: 250
         });
-
+    });
+    //Action du bouton de suppression des substituts
+    $('#zone-substitute').on('click','.supp-substitute',function() {
+        $(this).closest('.row-substitute').remove();
     });
     //Initialisation dès le départ de nos Select pour substitut
     initAjaxSelect2('#zone-substitute .select-substitute', {
@@ -222,3 +279,8 @@
         delay: 250,
     });
 </script>
+<style>
+    .supp-substitute {
+        cursor:pointer;
+    }
+</style>

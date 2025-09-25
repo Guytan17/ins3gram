@@ -79,4 +79,8 @@ class IngredientModel extends Model
             ], 'select' => 'ingredient.*, brand.name as brand, categ_ing.name as category'
         ];
     }
+    public function getNbingredients () {
+        $this->selectMax('id');
+        return $this->find();
+    }
 }
