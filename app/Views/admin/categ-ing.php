@@ -1,4 +1,5 @@
 <div class="row">
+    <!-- Section création de catégorie -->
     <div class="col-md-3">
         <div class="card">
             <?= form_open('/admin/categ-ing/insert') ?>
@@ -15,6 +16,7 @@
                             <option value="" selected>Aucune</option>
                             <?php if(isset($categorie)&& !empty($categorie)){
                                 foreach ($categorie as $cat) : ?>
+                                if
                                 <option value="<?=$cat['id']?>">
                                     <?=$cat['name']?>
                                 </option>
@@ -29,6 +31,7 @@
             <?= form_close() ?>
         </div>
     </div>
+    <!-- index des catégories-->
     <div class="col-md-9">
         <div class="card">
             <div class="card-header h4">
@@ -50,6 +53,7 @@
         </div>
     </div>
 </div>
+<!-- modal pour la modification des catégories-->
 <div class="modal" id="modalCategIng" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -136,6 +140,11 @@
     function showModal(id, name,id_categ_parent) {
         $('#modalNameInput').val(name);
         $('#modalIdCategParentSelect').val(id_categ_parent);
+        $('#modalIdCategParentSelect').each(function() {
+            if($(this).val()==='id'){
+                $(this).remove();
+            }
+        })
         $('#modalNameInput').data('id', id);
         myModal.show();
     }

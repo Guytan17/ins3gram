@@ -34,23 +34,33 @@ class Ingredient extends BaseController
     }
     public function create() {
         helper('form');
+        $nb_ing = model('IngredientModel')->getNbingredients();
+        $next_id=$nb_ing[0]['id']+1;
         $brands=model('BrandModel')->orderBy('name')->findAll();
         $categories=model('CategIngModel')->orderBy('name')->findAll();
-        return $this->view('/admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories]);
+        return $this->view('/admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories,'next_id'=>$next_id]);
     }
     public function insert()
     {
-        $im = Model('IngredientModel');
         $data = $this->request->getPost();
+        $im = Model('IngredientModel');
         if(empty($data['id_brand']))unset($data['id_brand']);
         if ($im->insert($data)) {
             $this->success('L\'ingrédient a été ajouté avec succès');
+            //Ajout des substituts s'il y en a
+            $sm=Model('SubstituteModel');
+            if(isset($data['substitute'])){
+                foreach($data['substitute'] as $sub) {
+                    if ($sm->insert($sub)) {
+                        $this->success('Substitut ajouté avec succès');
+                    }
+                }
+            }
         } else {
             foreach ($im->errors() as $error):
                 $this->error($error);
             endforeach;
         }
-
         return $this->redirect('admin/ingredient');
     }
     public function edit($id_ingredient) {
@@ -58,19 +68,38 @@ class Ingredient extends BaseController
         $brands=model('BrandModel')->orderBy('name')->findAll();
         $categories=model('CategIngModel')->orderBy('name')->findAll();
         $ingredient=model('IngredientModel')->find($id_ingredient);
+        $substitutes=model('SubstituteModel')->getSubByIdBase($id_ingredient);
+        $substituted=model('SubstituteModel')->getBaseByIdSub($id_ingredient);
+        $brand=model('BrandModel')->find($ingredient['id_brand']);
+        $category=model('CategIngModel')->find($ingredient['id_categ']);
         if (!$ingredient) {
             $this->error('Ingrédient introuvable');
             return $this->redirect('admin/ingredient');
         }
-        return $this->view('admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories, 'ingredient'=>$ingredient]);
+        return $this->view('admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories, 'ingredient'=>$ingredient,'brand'=>$brand,'category'=>$category,'substitutes'=>$substitutes,
+            'substituted'=>$substituted]);
     }
     public function update(){
         $data=$this->request->getPost();
         $id_ingredient=$data['id_ingredient'];
         $im=model('IngredientModel');
-        if(empty($data['id_brand']))unset($data['id_brand']);
+        if(empty($data['id_brand'])) {
+            $data['id_brand']=null;
+        };
         if ($im->update($id_ingredient,$data)) {
             $this->success('L\'ingrédient a été modifié avec succès');
+            //Gestion des substituts
+            $sm=Model('SubstituteModel');
+            //Suppression des substituts existants
+            $sm->where('id_ingredient_base',$id_ingredient)->delete();
+            //Ajout des nouveaux substituts s'il y en a
+            if(isset($data['substitute'])){
+                foreach($data['substitute'] as $sub) {
+                    if ($sm->insert($sub)) {
+                        $this->success('Substitut modifié avec succès');
+                    }
+                }
+            }
         } else {
             foreach ($im->errors() as $error):
                 $this->error($error);
