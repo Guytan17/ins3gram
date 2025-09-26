@@ -12,6 +12,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Nom</th>
                         <th>Description</th>
                         <th>Marque</th>
@@ -40,6 +41,19 @@
             },
             columns: [
                 {data: 'id'},
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        if (row.image_url) {
+                            return `<img style="height:30px;" src='${baseUrl}/${row.image_url}'>
+                        `;
+                        } else {
+                            return `<img style="height:30px;" src='${baseUrl}/assets/img/no-img.png'>
+                        `;
+                        }
+                    }
+                },
                 {data: 'name'},
                 {data: 'description'},
                 {data: 'brand'},
