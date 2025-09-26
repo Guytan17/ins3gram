@@ -33,5 +33,9 @@ class StepModel extends Model
             'integer'  => 'L’ID de la recette doit être un nombre.',
         ],
     ];
-
+public function getStepsByIdRecipe($id_recipe) {
+    $this->select('step.*');
+    $this->where('id_recipe',$id_recipe);
+    return $this->findAll();
+}
 }

@@ -71,7 +71,7 @@
                                 <div class="card mb-2">
                                     <div class="card-header">
                                         <?php if(isset($ingredient)) : ?>
-                                        Ingrédients qui substituent <span class="bg-warning rounded px-1"><?=isset($ingredient['name']) ? $ingredient['name']: ""?></span> :
+                                        Ingrédients qui substituent <span class="fw-bolder"><?=isset($ingredient['name']) ? $ingredient['name']: ""?></span> :
                                         <?php else : ?>
                                         Ingrédients qui le substitue :
                                         <?php endif ; ?>
@@ -112,9 +112,9 @@
                             <div class="card">
                                 <div class="card-header">
                                     <?php if(!isset($ingredient['substituted'])) : ?>
-                                        Aucun ingrédient n'est substitué par<span class="bg-warning rounded mx-1 px-1"><?=$ingredient['name']?></span>
+                                        Aucun ingrédient n'est substitué par<span class="fw-bolder mx-1"><?=$ingredient['name']?></span>
                                     <?php else : ?>
-                                        Ingrédients substitués par <span class="bg-warning rounded mx-2"><?=$ingredient['name']?></span> :
+                                        Ingrédients substitués par <span class="fw-bolder mx-1"><?=$ingredient['name']?></span> :
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-striped table-sm">

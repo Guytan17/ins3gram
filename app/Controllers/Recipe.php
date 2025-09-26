@@ -14,13 +14,16 @@ class Recipe extends BaseController
         return $this->view('front/recipe/index', ['recipes'=>$recipes], false);
     }
 
-        public function show($slug) {
+    public function show($slug) {
         $rm = Model('RecipeModel');
         $recipe = $rm->getFullRecipe(null,$slug);
-        if(!$recipe) {
-            $this->title = "Recette : " . $recipe['name'];
-            return $this->view('front/recipe/404.php',['recipe'=>$recipe],false);
-        }
-        return $this->view('front/recipe/show', ['recipe' => $recipe], false);
+            if(!$recipe) {
+                $this->title = "Recette : " . $recipe['name'];
+                return $this->view('front/recipe/404.php',['recipe'=>$recipe],false);
+            }
+        $tags = Model('TagRecipeModel')->getTagByRecipe($recipe['id']);
+        $ingredients = Model('QuantityModel')->getQuantityByRecipe($recipe['id']);
+        $steps = Model('StepModel')->getStepsByIdRecipe($recipe['id']);
+        return $this->view('front/recipe/show', ['recipe' => $recipe,'tags'=>$tags,'ingredients'=>$ingredients,'steps'=>$steps], false);
     }
 }
