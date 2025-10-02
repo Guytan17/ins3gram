@@ -212,9 +212,16 @@ if (!function_exists('build_filter_url')) {
         $final_params = array_merge($current_params, $new_params);
 
         // Exclusion de paramètres spécifiques si demandé
-        foreach ($exclude_params as $param) {
-            unset($final_params[$param]);
+        foreach ($exclude_params as $key => $param) {
+            if( is_array($param)){
+                foreach ($param as $value) {
+                    unset($final_params[$key][$value]);
+                }
+            } else {
+                unset($final_params[$param]);
+            }
         }
+
 
         // Nettoyage : suppression des valeurs vides/nulles
         $final_params = array_filter($final_params, function($value) {
@@ -271,7 +278,9 @@ if (!function_exists('is_filter_active')) {
         if (is_array($current)) {
             return in_array($value, $current);
         }
-
+        if(is_array($value)) {
+            return in_array($current,$value);
+        }
         return $current == $value;
     }
 }
