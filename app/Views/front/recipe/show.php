@@ -3,7 +3,7 @@
     <div class="col">
         <div class="position-relative">
             <?php if(isset($recipe['mea']['file_path'])) : ?>
-                <img src="<?= base_url($recipe['mea']['file_path']) ?>" class="img-fluid img-fluid-mea"  >
+                <img src="<?= base_url($recipe['mea']['file_path']) ?>" class="img-fluid recipe-img-mea">
             <?php endif; ?>
             <div class="position-absolute top-0 start-0 bg-black w-100 h-100 opacity-25"></div>
             <div class="position-absolute top-50 start-50 translate-middle text-white text-center">
@@ -18,12 +18,27 @@
 <div class="row">
     <div class="col">
         <div class="row row-cols-2 my-2">
-            <div class="col">
-                <span class="fas fa-star" data-star="1"></span>
-                <span class="fas fa-star" data-star="2"></span>
-                <span class="fas fa-star" data-star="3"></span>
-                <span class="fas fa-star" data-star="4"></span>
-                <span class="fas fa-star" data-star="5"></span>
+            <div class="col star-rating">
+                <input type="radio" name="star-rating" id="star5" value="5" />
+                <label for="star5">
+                    <i class="far fa-star"></i>
+                </label>
+                <input type="radio"  name="star-rating" id="star4" value="4" />
+                <label for="star4">
+                    <i class="far fa-star"></i>
+                </label>
+                <input type="radio"  name="star-rating" id="star3" value="3" />
+                <label for="star3">
+                    <i class="far fa-star"></i>
+                </label>
+                <input type="radio"  name="star-rating" id="star2" value="2" />
+                <label for="star2">
+                    <i class="far fa-star"></i>
+                </label>
+                <input type="radio"  name="star-rating" id="star1" value="1" />
+                <label for="star1">
+                    <i class="far fa-star"></i>
+                </label>
             </div>
         </div>
     </div>
@@ -39,7 +54,7 @@
 </div>
 <!-- END:TAGS-->
 <!-- START: INGREDIENTS -->
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <div class="card">
             <div class="card-header">
@@ -58,7 +73,7 @@
     </div>
 </div>
 <!-- END: INGREDIENTS -->
-<div class="row">
+<div class="row mb-3">
 <!-- START: IMAGES -->
     <?php if(!empty($recipe['images'])) : ?>
         <div class="col-md-6">
@@ -68,7 +83,7 @@
                         <?php foreach($recipe['images'] as $image) : ?>
                         <li class="splide__slide">
                             <a href="<?= base_url($image['file_path']); ?>" data-lightbox="mainslider">
-                                <img  src="<?= base_url($image['file_path']);?>" >
+                                <img class=img-fluid src="<?= base_url($image['file_path']);?>" >
                             </a>
                         </li>
                         <?php endforeach;?>
@@ -91,46 +106,29 @@
 <!-- END: IMAGES -->
 <!-- START: DESCRIPTION -->
     <div class="col">
-        <div class="d-flex flex-column justify-content h-100 p-3">
-            <div>
-                <span class="fw-bold"> Description :</span>
+        <div class="card d-flex flex-column justify-content h-100">
+            <div class="card-header">
+                <h2> Description :</h2>
             </div>
-            <div>
+            <div class="card-body">
                 <?= $recipe['description'] ?>
             </div>
         </div>
     </div>
-    <!-- START: DESCRIPTION -->
+    <!-- END: DESCRIPTION -->
 </div>
 <!-- START: ÉTAPES -->
-<div class="row">
+<div class="row mb-3" >
     <div class="col">
-        <div class="card">
+        <div class="card ">
             <div class="card-header">
                 <h2>Étapes</h2>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-4">
-                        <div id="list-steps" class="list-group">
-                            <?php foreach($steps as $step) :?>
-                                <a class="list-group-item list-group-item-action" href="#list-item-<?=$step['order']?>">
-                                    Étape <?=$step['order']?>
-                                </a>
-                            <?php endforeach ; ?>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div data-bs-spy="scroll" data-bs-target="#list-steps" data-bs-smooth-scroll="true" data-bs-offset="0" class="scrollspy-steps" tabindex="0">
-                            <?php foreach($steps as $step) :?>
-                                <h4 id="list-item-<?=$step['order']?>">Étape <?=$step['order']?></h4>
-                                <p>
-                                    <?=$step['description']?>
-                                </p>
-                            <?php endforeach ; ?>
-                        </div>
-                    </div>
-                </div>
+                <?php foreach($steps as $step) { ?>
+                <h4 id="list-step-<?= $step['order'] ?>">Étape <?= $step['order'] ?></h4>
+                    <p><?= $step['description'] ?> </p>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -166,10 +164,32 @@
         main.mount();
         thumbnails.mount();
     <!-- END: le visionneur d'images -->
-    <!-- START:  -->
+    <!-- START: notation par étoiles -->
+        const stars = document.querySelectorAll('.star-rating input');
+        console.log(stars);
+        stars.forEach(star => {
+            star.addEventListener("click",getRating) ;
+        });
+        function getRating (e) {
+            const i = (e.target.value);
+            document.querySelector(`label[for="star${i}"] svg`).setAttribute('data-prefix', 'fas');
+        }
+        /*
 
-    <!-- END:  -->
-    })
+input.addEventListener('click', () => {
+                // remettre tout en contour
+                document.querySelectorAll('.star-rating i').forEach(star => {
+                    star.classList.replace('far', 'fas');
+                });
+            });
+
+
+                // remplir toutes les étoiles <= valeur cliquée
+                for (let i = 1; i <= input.value; i++) {
+
+                }
+
+        */
+        <!-- END:  notation par étoiles-->
+    });
 </script>
-<style>    }
-</style>

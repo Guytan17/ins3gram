@@ -16,5 +16,13 @@ $routes->group('user',function($routes){
     $routes->post('insert','User::insert');
     $routes->post('update','User::update');
 });
+
+$routes->group('messagerie',['filter'=>'auth'],function($routes) {
+    $routes->get('/','Chat::index');
+    $routes->get('conversation','Chat::conversation');
+    $routes->get('new-messages','Chat::newMessages');
+    $routes->get('historique','Chat::historique');
+    $routes->post('send', 'Chat::send');
+});
 //dataTable
 $routes->post('/datatable/searchdatatable','DataTable::searchdatatable');
