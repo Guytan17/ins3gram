@@ -88,7 +88,7 @@
                     <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">
                         <i class="fas fa-user"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-end px-2">
                         <?php
                             if(isset($session_user)) :
                                 echo "Coucou"." ".$session_user->username;
@@ -101,6 +101,9 @@
                             <?php endif; ?>
                                 <li>
                                     <a class="dropdown-item" href="<?= base_url(); ?>">Mon profil</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('/messagerie'); ?>">Messagerie</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="<?= base_url('/auth/logout'); ?>">Se déconnecter</a>

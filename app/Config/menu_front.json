@@ -10,5 +10,11 @@
     "url": "/recette",
     "icon": "<i class=\"nav-icon fas fa-martini-glass\"></i>",
     "class": "main-menu-accueil"
+  },
+  "messagerie": {
+    "title": "Messagerie",
+    "url": "/messagerie",
+    "icon": "<i class=\"nav-icon fas fa-comment-dots\"></i>",
+    "class": "main-menu-accueil"
   }
 }

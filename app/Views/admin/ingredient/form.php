@@ -91,7 +91,9 @@
                                                             <select class="form-select flex-fill select-substitute" name="substitute[<?= $cpt_sub?>][id_ingredient_sub]">
                                                                 <option value="<?= $sub['id_ingredient_sub']?>"><?= $sub['sub_name']?></option>
                                                             </select>
-                                                            <input type="hidden" name="substitute[<?= $cpt_sub?>][id_ingredient_base]" value="<?= $ingredient['id'] ?>">
+                                                            <?php if(isset($ingredient)) : ?>
+                                                                <input type="hidden" name="substitute[<?=$cpt_sub?>][id_ingredient_base]" value="<?=$ingredient['id']?>">
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -111,7 +113,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <?php if(!isset($ingredient['substituted'])) : ?>
+                                    <?php if(empty($substituted)) : ?>
                                         Aucun ingrédient n'est substitué par<span class="fw-bolder mx-1"><?=$ingredient['name']?></span>
                                     <?php else : ?>
                                         Ingrédients substitués par <span class="fw-bolder mx-1"><?=$ingredient['name']?></span> :
@@ -138,6 +140,16 @@
                             </div>
                         </div>
                         <?php } ?>
+                    <!-- Image-->
+                    </div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="image" class="form-label">Image de l'ingrédient</label>
+                            <input type="file" name="image" class="form-control mt-2">
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    <div>
                     </div>
                 </div>
             </div>
@@ -234,7 +246,9 @@
                                 </span>
                                 <select class="form-select flex-fill select-substitute" name="substitute[${cpt_sub}][id_ingredient_sub]">
                                 </select>
-                                <input type="hidden" name="substitute[${cpt_sub}][id_ingredient_base]" value="<?=(isset($ingredient['id'])) ? ($ingredient['id']) : $next_id ?>">
+                                <?php if(isset($ingredient)) { ?>
+                                <input type="hidden" name="substitute[${cpt_sub}][id_ingredient_base]" value="<?=$ingredient['id'] ?>">
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -268,7 +282,6 @@
         searchFields: 'name,description',
         showDescription: true,
         delay: 250,
-        allowClear:true // permet de ne rien sélectionner
     });
 
     initAjaxSelect2('#zone-categ .select-categ', {
