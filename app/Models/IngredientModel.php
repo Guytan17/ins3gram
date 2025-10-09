@@ -79,7 +79,7 @@ class IngredientModel extends Model
                 ],
                 [
                     'table' => 'media',
-                    'condition' => 'ingredient.id = media.entity_id AND media.entity_type=\'ingredient\'',
+                    'condition' => 'ingredient.id = media.entity_id AND media.entity_type="ingredient"',
                     'type' => 'left'
                 ]
             ], 'select' => 'ingredient.*, brand.name as brand, categ_ing.name as category,media.file_path as image_url'
@@ -87,6 +87,13 @@ class IngredientModel extends Model
     }
     public function getNbingredients () {
         $this->selectMax('id');
+        return $this->find();
+    }
+
+    public function getIngredientById($id_ingredient){
+        $this->select('ingredient.*,media.path_file as img');
+        $this->join('media','ingredient.id=media.entity_id et media.entity_type=\'ingredient\'');
+        $this->where('ingredient.id',$id_ingredient);
         return $this->find();
     }
 }

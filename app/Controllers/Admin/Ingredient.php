@@ -34,26 +34,40 @@ class Ingredient extends BaseController
     }
     public function create() {
         helper('form');
-        $nb_ing = model('IngredientModel')->getNbingredients();
-        $next_id=$nb_ing[0]['id']+1;
         $brands=model('BrandModel')->orderBy('name')->findAll();
         $categories=model('CategIngModel')->orderBy('name')->findAll();
-        return $this->view('/admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories,'next_id'=>$next_id]);
+        return $this->view('/admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories]);
     }
     public function insert()
     {
         $data = $this->request->getPost();
         $im = Model('IngredientModel');
         if(empty($data['id_brand']))unset($data['id_brand']);
-        if ($im->insert($data)) {
+        if ($id_ing=$im->insert($data,true)) {
             $this->success('L\'ingrédient a été ajouté avec succès');
             //Ajout des substituts s'il y en a
             $sm=Model('SubstituteModel');
             if(isset($data['substitute'])){
                 foreach($data['substitute'] as $sub) {
+                    $sub['id_ingredient_base']=$id_ing;
                     if ($sm->insert($sub)) {
                         $this->success('Substitut ajouté avec succès');
                     }
+                }
+            }
+            $image = $this->request->getFile('image');
+            if($image && $image->getError() !== UPLOAD_ERR_NO_FILE) {
+                $mediaData = [
+                    'entity_type' => 'ingredient',
+                    'entity_id' => $id_ing,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                $uploadResult = upload_file($image,'/ingredient/'.$id_ing,$image->getName(),$mediaData,false);
+                // Vérifier le résultat de l'upload
+                if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                    // Afficher un message d'erreur détaillé
+                    $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
                 }
             }
         } else {
@@ -100,6 +114,21 @@ class Ingredient extends BaseController
                     }
                 }
             }
+            $image = $this->request->getFile('image');
+            if($image && $image->getError() !== UPLOAD_ERR_NO_FILE) {
+                $mediaData = [
+                    'entity_type' => 'ingredient',
+                    'entity_id' => $id_ingredient,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                // Utiliser la fonction upload_file() de l'utils_helper pour gérer l'upload et les données du média
+                $uploadResult = upload_file($image,'/ingredient/'.$id_ingredient,$image->getName(),$mediaData,false);
+                // Vérifier le résultat de l'upload
+                if (is_array($uploadResult) && $uploadResult['status'] === 'error') {
+                    // Afficher un message d'erreur détaillé
+                    $this->error("Une erreur est survenue lors de l'upload de l'image : " . $uploadResult['message']);
+                }
+            }
         } else {
             foreach ($im->errors() as $error):
                 $this->error($error);
@@ -107,7 +136,8 @@ class Ingredient extends BaseController
         }
         return $this->redirect('/admin/ingredient');
     }
-    public function delete(){
+    public function delete()
+    {
         $im = Model('IngredientModel');
         $id = $this->request->getPost('id');
         if ($im->delete($id)) {

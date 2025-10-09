@@ -12,11 +12,11 @@
             </div>
             <?php
             if(isset($ingredient)):
-                echo form_open('admin/ingredient/update', ['class' => 'needs-validation', 'novalidate' => true]); ?>
+                echo form_open_multipart('admin/ingredient/update', ['class' => 'needs-validation', 'novalidate' => true]); ?>
                 <input type="hidden" name="id_ingredient" value="<?= $ingredient['id'] ?>">
             <?php
             else :
-                echo form_open('admin/ingredient/insert',['class' => 'needs-validation', 'novalidate' => true]);
+                echo form_open_multipart('admin/ingredient/insert',['class' => 'needs-validation', 'novalidate' => true]);
             endif;
             ?>
             <div class="card-body">
@@ -144,7 +144,7 @@
                     </div class="row g-3">
                         <div class="col-md-6">
                             <label for="image" class="form-label">Image de l'ingrédient</label>
-                            <input type="file" name="image" class="form-control mt-2">
+                            <input type="file" name="image" id="image" class="form-control mt-2">
                         </div>
                         <div class="col-md-6">
 

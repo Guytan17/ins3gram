@@ -39,23 +39,35 @@
                     model: 'IngredientModel'
                 }
             },
-            columns: [
+            columnDefs:
+            [
+                {
+                    targets: '_all',
+                    className: 'align-middle'
+                }
+            ],
+            columns:
+            [
                 {data: 'id'},
                 {
                     data: null,
+                    className: 'd-flex justify-content-center',
                     orderable: false,
                     render: function (data, type, row) {
                         if (row.image_url) {
-                            return `<img style="height:30px;" src='${baseUrl}/${row.image_url}'>
+                            return `<img style="height:40px;" src='${baseUrl}/${row.image_url}'>
                         `;
                         } else {
-                            return `<img style="height:30px;" src='${baseUrl}/assets/img/no-img.png'>
+                            return `<img style="height:40px;" src='${baseUrl}/assets/img/no-img.png'>
                         `;
                         }
-                    }
+                    },
                 },
                 {data: 'name'},
-                {data: 'description'},
+                {
+                    data:'description',
+                    className:'text-start'
+                },
                 {data: 'brand'},
                 {data: 'category'},
                 {
@@ -130,3 +142,8 @@
         });
     }
 </script>
+<style>
+    td.text-start p {
+        display: inline;
+    }
+</style>

@@ -48,9 +48,9 @@ class Chat extends BaseController
 
     public function historique()
     {
-        $data = $this->request->getGet('id');
+        $id = $this->request->getGet('id');
         $cm = Model('ChatModel');
-        $historique = $cm->getNewMessages($data['id_1'], $data['id_2'], $data['date']);
-        return $this->response->setJSON($historique);
+        $histo = $cm->getHistorique($id);
+        return $this->response->setJSON($histo);
     }
 }

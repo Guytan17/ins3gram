@@ -28,9 +28,8 @@ class BrandModel extends Model
             'is_unique'=>'Cette marque existe déjà.',
         ],
     ];
-    protected $select2SearchFields= ['name','description'];
+    protected $select2SearchFields= ['name'];
     protected $select2DisplayField='name';
-    protected $select2AdditionalFields=['description'];
     protected function getDataTableConfig(): array
     {
         return [
