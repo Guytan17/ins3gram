@@ -1,20 +1,14 @@
 {
-  "Générer": {
-    "title": "Générer une recette",
-    "url": "/recette",
-    "icon": "<i class=\"nav-icon fas fa-blender\"></i>",
-    "class": "main-menu-accueil"
-  },
   "recettes": {
     "title": "Recettes",
     "url": "/recette",
     "icon": "<i class=\"nav-icon fas fa-martini-glass\"></i>",
     "class": "main-menu-accueil"
   },
-  "messagerie": {
-    "title": "Messagerie",
-    "url": "/messagerie",
-    "icon": "<i class=\"nav-icon fas fa-comment-dots\"></i>",
-    "class": "main-menu-accueil"
+  "contact": {
+    "title": "Contact",
+    "url": "/contactez-nous",
+    "icon": "<i class=\"nav-icon fas fa-envelope\"></i>",
+    "class": ""
   }
 }
