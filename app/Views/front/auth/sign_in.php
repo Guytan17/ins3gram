@@ -18,13 +18,12 @@
                 <?= session()->getFlashdata('success') ?>
             </div>
         <?php endif; ?>
-
-
         <div class="card">
             <div class="card-header">
                 Se connecter
             </div>
             <form action="<?= base_url('auth/login'); ?>" method="POST">
+                <input type="hidden" name="<?= csrf_token(); ?>" value="<?= csrf_hash(); ?>">
                 <div class="card-body">
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
