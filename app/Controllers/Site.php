@@ -27,4 +27,17 @@ class Site extends BaseController
         echo "Nombre de pages : " . $pager->getPageCount() . "<br>";
         var_dump($pager->links()); // Génère les liens HTML
     }
+
+    public function test() {
+        $email = service('email');
+        $email->setTo('tanguycolombani@gmail.com');
+        $email->setSubject('Email test');
+        $email->setMessage('Ceci est un test');
+        if ($email->send()) {
+            echo "E-mail envoyé avec succès !";
+        } else {
+            echo $email->printDebugger(['headers']);
+        }
+
+    }
 }

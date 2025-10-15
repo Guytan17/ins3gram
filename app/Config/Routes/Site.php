@@ -1,6 +1,9 @@
 <?php
 $routes->get('/', 'Home::index');
 $routes->get('/forbidden','Site::forbidden');
+
+$routes->get('/test', 'Site::test');
+
 $routes->get('/sign-in','Auth::signIn');
 $routes->get('/register','User::register');
 $routes->post('/auth/login','Auth::login');
@@ -26,3 +29,8 @@ $routes->group('messagerie',['filter'=>'auth'],function($routes) {
 });
 //dataTable
 $routes->post('/datatable/searchdatatable','DataTable::searchdatatable');
+
+$routes->group('contactez-nous', function($routes) {
+  $routes->get('/','Contact::index');
+  $routes->post('send','Contact::send');
+});

@@ -98,9 +98,20 @@
                 </div>
                 <div  id="zone-ingredients">
                 </div>
-                <div>
-                    <label for="note" class="form-label">Note</label>
-                    <input type="range" class="form-range" min="0" max="5" id="note">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-12">
+                            Note
+                        </div>
+                        <div class="col-6">
+                            <input type="range" class="form-range" min="0" max="5" id="rangeOpinion" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <output for="" id="rangeOpinionValue" aria-hidden="true">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                            </output>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-footer d-grid">
@@ -207,5 +218,21 @@
                 delay: 250
             });
         });
+        //Évènement sur le range picker
+        $('#rangeOpinion').on('input',function(){
+            var stars = '';
+            for(i = 0; i< this.value; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            for(i = this.value; i < 5; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            $("#rangeOpinionValue").html(stars)
+        });
     })
 </script>
+<style>
+    .fa-star {
+        color: var(--bs-warning);
+    }
+</style>

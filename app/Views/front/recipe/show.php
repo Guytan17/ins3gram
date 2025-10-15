@@ -15,37 +15,38 @@
 </div>
 <!-- END: MEA et titre/créateur de la recette-->
 <!-- START: NOTER, TÉLÉCHARGER, LIKER,PARTAGER-->
-<div class="row">
-    <div class="col">
-        <div class="row row-cols-2 my-2">
-            <div class="col star-rating">
-                <input type="radio" name="star-rating" id="star5" value="5" />
-                <label for="star5">
-                    <i class="far fa-star"></i>
-                </label>
-                <input type="radio"  name="star-rating" id="star4" value="4" />
-                <label for="star4">
-                    <i class="far fa-star"></i>
-                </label>
-                <input type="radio"  name="star-rating" id="star3" value="3" />
-                <label for="star3">
-                    <i class="far fa-star"></i>
-                </label>
-                <input type="radio"  name="star-rating" id="star2" value="2" />
-                <label for="star2">
-                    <i class="far fa-star"></i>
-                </label>
-                <input type="radio"  name="star-rating" id="star1" value="1" />
-                <label for="star1">
-                    <i class="far fa-star"></i>
-                </label>
-            </div>
+<div class="row my-2">
+    <div class="col text-center">
+        <div data-value="1" id="scoreOpinion">
+            <i data-value="1" class="far fa-xl fa-star"></i>
+            <i data-value="2" class="far fa-xl fa-star"></i>
+            <i data-value="3" class="far fa-xl fa-star"></i>
+            <i data-value="4" class="far fa-xl fa-star"></i>
+            <i data-value="5" class="far fa-xl fa-star"></i>
         </div>
     </div>
+    <div class="col text-center" id="favorite" data-value="0">
+        <?php if( ($session_user != null) && $session_user->hasFavorite($recipe['id']) ) :
+            $text_favorite = "Supprimer de mes favoris";
+            $class_favorite = "fas";
+        else :
+            $text_favorite = "Ajouter à mes favoris";
+            $class_favorite = "far";
+        endif; ?>
+            <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?= $text_favorite ?>" title="<?= $text_favorite ?>" id="heart">
+                <i class="<?= $class_favorite ?> fa-heart fa-2xl text-danger" ></i>
+            </div>
+    </div>
+    <div class="col text-center">
+        <!--TODO: Coeur de favoris qui sauvegarde au clique, sinon swal2 qui propose un lien vers /sign-in  -->
+        <!--TODO: Liens de partage de la page vers les reseaux sociaux (facebook / twitter)  -->
+        <?= social_share_links(current_url(),$recipe['name'].'-In3gram'); ?>
+    </div>
 </div>
+
 <!-- END: NOTER, TÉLÉCHARGER, LIKER,PARTAGER-->
 <!-- START:TAGS-->
-<div class="row mb-3">
+<div class="row my-3">
     <div class="col text-center">
         <?php foreach($tags as $tag) : ?>
             <span class="bg-warning rounded py-1 px-2 fw-bold"><i class="fas fa-hashtag"></i><?= $tag['name']?></span>
@@ -135,26 +136,26 @@
 </div>
 <!-- END: ÉTAPES -->
 <script>
-    $(document).ready(function(){
-    <!-- START: le visionneur d'images -->
-        var main = new Splide('#main-slider',{
-            type        :'fade',
-            heightRatio : 0.5,
-            pagination  : false,
-            arrows      : false,
-            cover       : false,//désactive "cover" pour éviter le crop
+    $(document).ready(function () {
+        /*
+        var main = new Splide('#main-slider', {
+            type       : 'fade',
+            heightRatio: 0.5,
+            pagination : false,
+            arrows     : false,
+            cover      : false, //désactiver "cover" pour éviter le crop
         });
         var thumbnails = new Splide('#thumbnail-slider', {
-            rewind          : true,
-            fixedWidth      : 80,
-            fixedHeight     : 80,
-            isNavigation    : true,
-            gap             : 10,
-            focus           : 'center',
-            pagination      : false,
-            cover           : false,//désactive "cover" pour éviter le crop
-            breakpoints     : {
-                640 : {
+            rewind       : true,
+            fixedWidth   : 80,
+            fixedHeight  : 80,
+            isNavigation : true,
+            gap          : 10,
+            focus        : 'center',
+            pagination   : false,
+            cover        : false,
+            breakpoints : {
+                640: {
                     fixedWidth  : 60,
                     fixedHeight : 60,
                 },
@@ -163,33 +164,145 @@
         main.sync(thumbnails);
         main.mount();
         thumbnails.mount();
-    <!-- END: le visionneur d'images -->
-    <!-- START: notation par étoiles -->
-        const stars = document.querySelectorAll('.star-rating input');
-        console.log(stars);
-        stars.forEach(star => {
-            star.addEventListener("click",getRating) ;
-        });
-        function getRating (e) {
-            const i = (e.target.value);
-            document.querySelector(`label[for="star${i}"] svg`).setAttribute('data-prefix', 'fas');
-        }
-        /*
-
-input.addEventListener('click', () => {
-                // remettre tout en contour
-                document.querySelectorAll('.star-rating i').forEach(star => {
-                    star.classList.replace('far', 'fas');
-                });
-            });
-
-
-                // remplir toutes les étoiles <= valeur cliquée
-                for (let i = 1; i <= input.value; i++) {
-
-                }
-
         */
-        <!-- END:  notation par étoiles-->
-    });
+
+        // Gestion de la notation
+        $('#scoreOpinion').on('mouseenter', '.fa-star', function(){
+            var opinion_score = $(this).data('value');
+            var current_score = $('#scoreOpinion').data('value');
+
+            // Ne met à jour les classes que si le score change
+            if (opinion_score !== current_score) {
+                $('#scoreOpinion').data('value', opinion_score);
+                $('.fa-star').each(function() {
+                    if ($(this).data('value') <= opinion_score) {
+                        $(this).removeClass('far').addClass('fas');
+                    } else {
+                        $(this).removeClass('fas').addClass('far');
+                    }
+                });
+            }
+        });
+        $('#scoreOpinion').on('click', function(){
+            <?php if ($session_user != null) : ?>
+            var score = $(this).data('value');
+            var name = $('h1').first().text();
+            Swal.fire({
+                title: "Validation",
+                text : "Êtes-vous sûr de vouloir mettre " + score + " à " + name + " ?",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui !",
+                cancelButtonText: "Non !"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url : "<?= base_url('api/recipe/score'); ?>",
+                        type : "POST",
+                        data : {
+                            'score' : score,
+                            'id_recipe' : '<?= $recipe['id']; ?>',
+                            'id_user' : '<?= $session_user->id ?? ""; ?>',
+                        },
+
+                    })
+                    Swal.fire({
+                        title: "Validé!",
+                        text: "Votre note a été prise en compte.",
+                        icon: "success"
+                    });
+                }
+            });
+            <?php else : ?>
+            Swal.fire({
+                title : "Vous n'êtes pas connecté(e) !",
+                text : "Veuillez vous connecter ou vous inscrire.",
+                icon : "warning",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "S'inscrire",
+                denyButtonText: 'Se connecter',
+                cancelButtonText: "Revenir à la recette",
+                confirmButtonColor: "var(--bs-primary)",
+                denyButtonColor: "var(--bs-success)",
+                cancelButtonColor: "var(--bs-secondary)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    //s'inscrire
+                    window.location.href = "<?= base_url('register'); ?>";
+                } else if (result.isDenied) {
+                    //se connecter
+                    window.location.href = "<?= base_url('sign-in'); ?>";
+                }
+            });
+            <?php endif; ?>
+        });
+
+        //Gestion de la mise en favori
+        $('#favorite').on('click','#heart', function() {
+            <?php if ($session_user != null) : ?>
+            $.ajax({
+                url: "<?= base_url('api/recipe/favorite');?>",
+                type:'POST',
+                data: {
+                    id_user: <?=$session_user->id ?? "";?>,
+                    id_recipe: <?=$recipe['id'];?>,
+                },
+                success : function(response) {
+                    const tooltip = bootstrap.Tooltip.getInstance('#heart');
+                    if(response.type == 'delete') {
+                        tooltip.setContent({'.tooltip-inner': 'Ajouter à mes favoris'});
+                        $('#favorite .fa-heart').removeClass('fas').addClass('far');
+                    } else {
+                        tooltip.setContent({'.tooltip-inner': 'Supprimer de mes favoris'});
+                        $('#favorite .fa-heart').removeClass('far').addClass('fas');
+                    }
+                }
+            })
+            <?php else : ?>
+                swalConnexion();
+            <?php endif; ?>
+        });
+        function swalConnexion() {
+            Swal.fire({
+                title : "Vous n'êtes pas connecté(e) !",
+                text : "Veuillez vous connecter ou vous inscrire.",
+                icon : "warning",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "S'inscrire",
+                denyButtonText: 'Se connecter',
+                cancelButtonText: "Revenir à la recette",
+                confirmButtonColor: "var(--bs-primary)",
+                denyButtonColor: "var(--bs-success)",
+                cancelButtonColor: "var(--bs-secondary)",
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    //s'inscrire
+                    window.location.href = "<?= base_url('register'); ?>";
+                } else if (result.isDenied) {
+                    //se connecter
+                    window.location.href = "<?= base_url('sign-in'); ?>";
+                }
+            });
+        }
+    })
 </script>
+<style>
+    .fa-star {
+        color: var(--bs-warning);
+        cursor: pointer;
+    }
+    .fa-heart:hover {
+        scale: 1.1;
+        cursor: pointer;
+    }
+    #heart {
+        width: fit-content;
+        margin: auto;
+    }
+</style>

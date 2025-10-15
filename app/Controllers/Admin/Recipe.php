@@ -332,4 +332,18 @@ class Recipe extends BaseController
             }
         }
     }
+    public function saveScore() {
+        $data = $this->request->getPost();
+        $om = Model('OpinionModel');
+        $result = $om->insertOrUpdateScore($data['id_recipe'],$data['id_user'],$data['score']);
+        return $this->response->setJSON(["data" => $result]);
+    }
+
+    public function switchFavorite() {
+        $data = $this->request->getPost();
+        $fm = Model('FavoriteModel');
+        return $this->response->setJSON(
+            $fm->switchFavorite($data['id_recipe'], $data['id_user'])
+        );
+    }
 }

@@ -20,7 +20,7 @@
                         <th>Actions</th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody class="text-start align-middle"></tbody>
                 </table>
             </div>
         </div>
@@ -39,13 +39,6 @@
                     model: 'IngredientModel'
                 }
             },
-            columnDefs:
-            [
-                {
-                    targets: '_all',
-                    className: 'align-middle'
-                }
-            ],
             columns:
             [
                 {data: 'id'},
@@ -64,10 +57,7 @@
                     },
                 },
                 {data: 'name'},
-                {
-                    data:'description',
-                    className:'text-start'
-                },
+                {data:'description'},
                 {data: 'brand'},
                 {data: 'category'},
                 {
@@ -143,7 +133,7 @@
     }
 </script>
 <style>
-    td.text-start p {
+    td p {
         display: inline;
     }
 </style>
