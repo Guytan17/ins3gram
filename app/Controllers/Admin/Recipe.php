@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\MediaModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Recipe extends BaseController

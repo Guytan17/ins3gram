@@ -86,13 +86,13 @@ endif;
                     <!--START:IMAGES -->
                     <div class="tab-pane fade " id="image-tab-pane" role="tabpanel">
                         <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
-                            <?php if(isset($recipe['images'])):
-                                foreach($recipe['images'] as $image) : ?>
+                            <?php if(isset($recipe->images)):
+                                foreach($recipe->images as $image) : ?>
                                 <div class="col">
                                     <div class="position-relative img-hover-delete">
                                         <div class="position-absolute img-thumbnail" style="width: 100%;height: 100%;background-color:rgb(0,0,0,0.4); display:none;">
                                             <div class="d-flex justify-content-center align-items-center" style="height:100%">
-                                                <a href="" class="btn btn-danger text-light delete-img" data-id="<?= $image['id'] ?>">
+                                                <a href="" class="btn btn-danger text-light delete-img" data-id="<?= $image->id ?>">
                                                     <i class="fas fa-trash-alt"></i> Supprimer
                                                 </a>
                                             </div>

@@ -36,7 +36,7 @@ class AuthFilter implements FilterInterface
 
         // Vérifier la validité de la session (optionnel - sécurité renforcée)
         $lastActivity = $session->get('last_activity');
-        $sessionTimeout = 3600; // 1 heure en secondes
+        $sessionTimeout = 7200; // 2 heures en secondes
 
         if ($lastActivity && (time() - $lastActivity) > $sessionTimeout) {
             log_message('info', "Session expired for user {$user->id}");
