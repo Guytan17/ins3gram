@@ -14,15 +14,50 @@
             <?php
             // Ouverture du formulaire selon le cas : update ou create
             if(isset($user)):
-                echo form_open('admin/user/update', ['class' => 'needs-validation', 'novalidate' => true]); ?>
+                echo form_open_multipart('admin/user/update', ['class' => 'needs-validation', 'novalidate' => true]); ?>
                 <!-- Champ caché pour stocker l'ID de l'utilisateur lors de la modification -->
                 <input type="hidden" name="id" value="<?= $user->id ?>">
             <?php
             else:
-                echo form_open('admin/user/insert', ['class' => 'needs-validation', 'novalidate' => true]);
+                echo form_open_multipart('admin/user/insert', ['class' => 'needs-validation', 'novalidate' => true]);
             endif;
             ?>
             <div class="card-body">
+                <!-- Avant les champs du formulaire, dans la card-body -->
+                <div class="row mb-3">
+                    <div class="col-12 text-center">
+                        <!-- Affichage de l'avatar -->
+                        <img src="<?= isset($user) ? $user->getAvatarUrl() : base_url('assets/img/default-avatar.png') ?>"
+                             alt="Avatar"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+
+                        <?php if(isset($user) && $user->hasAvatar()): ?>
+                            <p class="text-muted small">Avatar actuel</p>
+                        <?php else: ?>
+                            <p class="text-muted small">Aucun avatar (image par défaut)</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Champ pour uploader un nouvel avatar -->
+                <div class="col-12 mb-3">
+                    <div class="row">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <?php if(isset($user) && $user->hasAvatar()): ?>
+                                    <img src="<?= isset($user) ? $user->getAvatarUrl() : base_url('assets/img/default/avatar.png') ?>" alt="Avatar" class="rounded-circle img-thumbnail"
+                                     style="max-width:100px; height:auto;">
+                                <?php else : ?>
+                                    <p class="text-muted small">Aucun avatar</p>
+                                <?php endif ; ?>
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="file" name="avatar" id="avatar" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row g-3">
                     <!-- Prénom et Nom sur la même ligne -->
                     <div class="col-md-6">

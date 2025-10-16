@@ -9,7 +9,7 @@ class MediaModel extends Model
     protected $table = 'media';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
+    protected $returnType = 'App\Entities\Media'; // Au lieu de 'array'
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = ['file_path', 'entity_id', 'entity_type', 'title', 'alt'];
@@ -48,21 +48,25 @@ class MediaModel extends Model
             'max_length' => 'Le texte alternatif ne peut pas dépasser 255 caractères.',
         ],
     ];
-    public function deleteMedia($id) {
-        // Récupérer les informations du fichier depuis la base de données
-        $fichier = $this->find($id);
-        if ($fichier) {
-            // Chemin complet du fichier tel qu'il est stocké dans la base de données
-            $chemin = FCPATH . $fichier['file_path'];
 
-            // Vérifier si le fichier existe et le supprimer
-            if (file_exists($chemin)) {
-                // Supprimer le fichier physique
-                unlink($chemin);
-                // Supprimer l'entrée de la base de données
-                return $this->delete($id);
-            }
+    /**
+     * Supprime un média (fichier + BDD) avec transaction
+     *
+     * @param int $id ID du média à supprimer
+     * @return bool Succès de la suppression
+     */
+    public function deleteMedia($id): bool
+    {
+        $media = $this->find($id);
+
+        if (!$media) {
+            return false;
         }
-        return false; // Le fichier n'a pas été trouvé
+
+        // démarrer une transaction
+        $this->db->transStart();
+
+        // La logique est désormais dans l'Entity
+        return $media->delete();
     }
 }
