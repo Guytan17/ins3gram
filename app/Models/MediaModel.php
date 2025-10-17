@@ -99,4 +99,15 @@ class MediaModel extends Model
             return false;
         }
     }
+
+    public function getMedias($page = 1, $perPage=10)
+    {
+        $data = $this->paginate($perPage, 'default', $page);
+        return
+            [
+                'data' => $data,
+                'pager' => $this->pager
+            ];
+
+    }
 }

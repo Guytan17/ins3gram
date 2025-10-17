@@ -31,6 +31,11 @@
       }
     }
   },
+  "media": {
+    "title": "Media",
+    "url": "admin/media",
+    "icon":"<i class=\"nav-icon fas fa-images\"></i>"
+  },
   "ingredients": {
     "title": "Ingrédients",
     "url": "/",

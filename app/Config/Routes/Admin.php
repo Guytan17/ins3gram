@@ -70,4 +70,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
        $routes->post('insert','UserPermission::insert');
        $routes->post('delete','UserPermission::delete');
     });
+
+    $routes->group('media', function($routes){
+        $routes->get('/','Media::index');
+        $routes->get('charger-plus', 'Media::loadMore');
+    });
 });
