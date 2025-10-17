@@ -66,7 +66,37 @@ class MediaModel extends Model
         // démarrer une transaction
         $this->db->transStart();
 
-        // La logique est désormais dans l'Entity
-        return $media->delete();
+        try {
+            // 1. Supprimer l'entrée en BDD d'abord
+            if (!$this->delete($id)) {
+                throw new \Exception("Échec de la suppression en base de données");
+            }
+
+            // 2. Ensuite supprimer le fichier physique
+            if ($media->fileExists()) {
+                $filePath = $media->getAbsolutePath();
+
+                if (!unlink($filePath)) {
+                    throw new \Exception("Échec de la suppression du fichier physique");
+                }
+            }
+
+            // Finaliser la transaction
+            $this->db->transComplete();
+
+            // Vérifier le statut
+            if ($this->db->transStatus() === false) {
+                log_message('error', "Transaction échouée pour le média ID {$id}");
+                return false;
+            }
+
+            return true;
+
+        } catch (\Exception $e) {
+            // Annuler la transaction en cas d'erreur
+            $this->db->transRollback();
+            log_message('error', 'Erreur suppression média : ' . $e->getMessage());
+            return false;
+        }
     }
 }

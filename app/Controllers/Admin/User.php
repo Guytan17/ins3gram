@@ -156,6 +156,36 @@ class User extends BaseController
             }
         }
     }
+
+   public function deleteAvatar() {
+        $id = $this->request->getPost('id_user');
+        $user = model('UserModel')->find($id);
+        //Si il n'existe pas
+        if(!$user){
+            return $this->response->setJSON(
+                [
+                    'success' => false,
+                    'message' => 'Utilisateur introuvable'
+                ]
+            );
+        }
+
+        if($user->deleteAvatar()){
+            return $this->response->setJSON(
+                [
+                    'success' => true,
+                    'message' => 'Avatar supprimé avec succès',
+                ]
+            );
+        } else {
+            return $this->response->setJSON(
+                [
+                    'success' => false,
+                    'message' => 'Erreur lors de la suppression de l\'avatar',
+                ]
+            );
+        }
+    }
     public function search()
     {
         $request = $this->request;

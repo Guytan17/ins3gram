@@ -2,8 +2,8 @@
 <div class="row">
     <div class="col">
         <div class="position-relative">
-            <?php if(isset($recipe['mea']['file_path'])) : ?>
-                <img src="<?= base_url($recipe['mea']['file_path']) ?>" class="img-fluid recipe-img-mea">
+            <?php if(isset($recipe['mea'])) : ?>
+                <img src="<?= $recipe['mea']->getUrl() ?>" class="img-fluid recipe-img-mea">
             <?php endif; ?>
             <div class="position-absolute top-0 start-0 bg-black w-100 h-100 opacity-25"></div>
             <div class="position-absolute top-50 start-50 translate-middle text-white text-center">
@@ -137,7 +137,7 @@
 <!-- END: ÉTAPES -->
 <script>
     $(document).ready(function () {
-        /*
+       <?php if(isset($recipe['images']) && !empty($recipe['images'])) : ?>
         var main = new Splide('#main-slider', {
             type       : 'fade',
             heightRatio: 0.5,
@@ -164,7 +164,8 @@
         main.sync(thumbnails);
         main.mount();
         thumbnails.mount();
-        */
+        <?php endif; ?>
+
 
         // Gestion de la notation
         $('#scoreOpinion').on('mouseenter', '.fa-star', function(){
