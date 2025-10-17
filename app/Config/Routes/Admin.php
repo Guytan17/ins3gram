@@ -61,6 +61,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
        $routes->post('insert','User::insert');
        $routes->post('switch-active','User::switchActive');
        $routes->get('search','User::search');
+       $routes->post('delete-avatar','User::deleteAvatar');
     });
 
     $routes->group('user-permission',function($routes){

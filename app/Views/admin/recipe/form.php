@@ -86,8 +86,8 @@ endif;
                     <!--START:IMAGES -->
                     <div class="tab-pane fade " id="image-tab-pane" role="tabpanel">
                         <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
-                            <?php if(isset($recipe->images)):
-                                foreach($recipe->images as $image) : ?>
+                            <?php if(isset($recipe['images'])):
+                                foreach($recipe['images'] as $image) : ?>
                                 <div class="col">
                                     <div class="position-relative img-hover-delete">
                                         <div class="position-absolute img-thumbnail" style="width: 100%;height: 100%;background-color:rgb(0,0,0,0.4); display:none;">
@@ -97,7 +97,7 @@ endif;
                                                 </a>
                                             </div>
                                         </div>
-                                    <img class="img-thumbnail" src="<?=base_url($image['file_path'])?>">
+                                    <img class="img-thumbnail" src="<?=$image->getUrl();?>">
                                     </div>
                                 </div>
                                 <?php endforeach;
@@ -278,7 +278,7 @@ endif;
                     <label for="mea" class="form-label">Image Principale</label>
                     <?php if (isset($recipe['mea']) && !empty($recipe['mea'])) : ?>
                         <div class="text-center mb-3 ">
-                            <img class="img-thumbnail" src="<?= base_url($recipe['mea']['file_path']); ?>" >
+                            <img class="img-thumbnail" src="<?=$recipe['mea']->getUrl(); ?>" >
                         </div>
                     <?php endif; ?>
                     <input id="mea" type="file" name="mea" class="form-control">
