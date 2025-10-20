@@ -100,8 +100,14 @@ class MediaModel extends Model
         }
     }
 
-    public function getMedias($page = 1, $perPage=10)
+    public function getMedias($page = 1, $perPage=10, $entity_type=null)
     {
+        if($entity_type !=null){
+            $this->where('entity_type',$entity_type);
+            if($entity_type == 'recipe') {
+                $this->orWhere('entity_type','recipe_mea');
+            }
+        }
         $data = $this->paginate($perPage, 'default', $page);
         return
             [
@@ -109,5 +115,10 @@ class MediaModel extends Model
                 'pager' => $this->pager
             ];
 
+    }
+
+    public function getMediasFiltered($per_page=10, $page=1, $entity_type) {
+
+        return $this->paginate($per_page,'default',$page);
     }
 }

@@ -73,6 +73,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin','filter'=>'auth'
 
     $routes->group('media', function($routes){
         $routes->get('/','Media::index');
-        $routes->get('charger-plus', 'Media::loadMore');
+        $routes->get('load', 'Media::load');
+        $routes->post('delete', 'Media::delete');
     });
 });
