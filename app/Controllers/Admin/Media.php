@@ -17,8 +17,8 @@ class Media extends BaseController
     {
         $page = $this->request->getGet('page') ?? 1;
         $entity_type = $this->request->getGet('entity_type') ?? null;
-        $medias = Model('MediaModel')->getMedias($page,6,$entity_type);
-        return $this->response->setJSON($medias['data']);
+        $medias = Model('MediaModel')->getMedias($page,12,$entity_type);
+        return $this->response->setJSON([$medias['data'],$medias['pager']->getPageCount()]);
     }
 
     public function delete() {
