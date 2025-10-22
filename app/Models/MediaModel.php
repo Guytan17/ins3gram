@@ -116,9 +116,4 @@ class MediaModel extends Model
             ];
 
     }
-
-    public function getMediasFiltered($per_page=10, $page=1, $entity_type) {
-
-        return $this->paginate($per_page,'default',$page);
-    }
 }
