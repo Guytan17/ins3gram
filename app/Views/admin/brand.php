@@ -196,7 +196,7 @@
         if (!img_url) {
             img_url = base_url + '/assets/img/no-img.png';
         }
-        $('#modalImagePreview').attr('src', img_url);
+        $('#modalImagePreview img').attr('src', img_url);
         myModal.show();
     }
     function saveBrand() {
