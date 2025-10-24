@@ -19,7 +19,7 @@ class BrandModel extends Model
     protected $allowedFields    = ['name'];
     protected $useTimestamps = false;
     protected $validationRules =[
-      'name'=> 'required|max_length[255]|is_unique[brand.name,id,{id}]'
+      'name'=> 'required|max_length[255]'
     ];
     protected $validationMessages=[
         'name'=> [

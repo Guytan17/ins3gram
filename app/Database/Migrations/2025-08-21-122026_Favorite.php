@@ -21,7 +21,7 @@ class Favorite extends Migration
             ]
         ]);
 
-        $this->forge->addKey(['id_recipe','id_tag'], true);
+        $this->forge->addKey(['id_recipe','id_user'], true);
         $this->forge->addForeignKey('id_user', 'user','id', 'CASCADE', 'RESTRICT');
         $this->forge->addForeignKey('id_recipe', 'recipe','id', 'CASCADE', 'RESTRICT');
         $this->forge->createTable('favorite');
