@@ -26,17 +26,17 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="card" id="liste">
-                <div class="card-body">
-                    <div class="row row-cols-2 row-cols-md-6 g-3 mb-3" id="medias">
+</div>
+<div class="row mb-3">
+    <div class="col">
+        <div class="card" id="liste">
+            <div class="card-body">
+                <div class="row row-cols-2 row-cols-md-6 g-3 mb-3" id="medias">
 
-                    </div>
-                    <div class="row">
-                        <div class="col text-center">
-                            <span class="btn btn-outline-primary btn-sm" id="loadMore"></span>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <span class="btn btn-outline-primary btn-sm" id="loadMore"></span>
                     </div>
                 </div>
             </div>
