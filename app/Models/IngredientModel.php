@@ -85,15 +85,11 @@ class IngredientModel extends Model
             ], 'select' => 'ingredient.*, brand.name as brand, categ_ing.name as category,media.file_path as image_url'
         ];
     }
-    public function getNbingredients () {
-        $this->selectMax('id');
-        return $this->find();
-    }
-
     public function getIngredientById($id_ingredient){
-        $this->select('ingredient.*,media.path_file as img');
-        $this->join('media','ingredient.id=media.entity_id et media.entity_type=\'ingredient\'');
+        $this->select('ingredient.*,media.file_path as img');
+        $this->join('media','ingredient.id=media.entity_id AND media.entity_type=\'ingredient\'','left');
         $this->where('ingredient.id',$id_ingredient);
-        return $this->find();
+        // remplacement de find() par first() pour éviter d'avoir un tableau d'un tableau
+        return $this->first();
     }
 }

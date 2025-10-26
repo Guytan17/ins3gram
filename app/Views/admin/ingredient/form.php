@@ -147,7 +147,9 @@
                             <input type="file" name="image" id="image" class="form-control mt-2">
                         </div>
                         <div class="col-md-6">
-
+                            <div class="img-thumbnail">
+                                <img src="<?= base_url($ingredient['img']) ?? base_url('assets/img/default-avatar.png') ?>" alt="image de l'ingrédient" id="img-ing">
+                            </div>
                         </div>
                     <div>
                     </div>
@@ -295,5 +297,8 @@
 <style>
     .supp-substitute {
         cursor:pointer;
+    }
+    .img-ing{
+        width:fit-content;
     }
 </style>
