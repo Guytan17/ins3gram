@@ -38,8 +38,6 @@
             </div>
     </div>
     <div class="col text-center">
-        <!--TODO: Coeur de favoris qui sauvegarde au clique, sinon swal2 qui propose un lien vers /sign-in  -->
-        <!--TODO: Liens de partage de la page vers les reseaux sociaux (facebook / twitter)  -->
         <?= social_share_links(current_url(),$recipe['name'].'-In3gram'); ?>
     </div>
 </div>
@@ -49,7 +47,7 @@
 <div class="row my-3">
     <div class="col text-center">
         <?php foreach($tags as $tag) : ?>
-            <span class="bg-warning rounded py-1 px-2 fw-bold"><i class="fas fa-hashtag"></i><?= $tag['name']?></span>
+            <span class="bg-warning rounded py-1 px-2 fw-bold delius"><i class="fas fa-hashtag"></i><?= $tag['name']?></span>
         <?php endforeach; ?>
     </div>
 </div>
@@ -83,8 +81,8 @@
                     <ul class="splide__list">
                         <?php foreach($recipe['images'] as $image) : ?>
                         <li class="splide__slide">
-                            <a href="<?= base_url($image['file_path']); ?>" data-lightbox="mainslider">
-                                <img class=img-fluid src="<?= base_url($image['file_path']);?>" >
+                            <a href="<?= base_url($image->file_path); ?>" data-lightbox="mainslider">
+                                <img class=img-fluid src="<?= base_url($image->file_path);?>" >
                             </a>
                         </li>
                         <?php endforeach;?>
@@ -96,7 +94,7 @@
                     <ul class="splide__list">
                         <?php foreach($recipe['images'] as $image) : ?>
                             <li class="splide__slide">
-                                <img class="img-thumbnail rounded" src="<?= base_url($image['file_path']);?>" >
+                                <img class="img-thumbnail rounded" src="<?= base_url($image->file_path);?>" >
                             </li>
                         <?php endforeach;?>
                     </ul>
@@ -123,13 +121,31 @@
     <div class="col">
         <div class="card ">
             <div class="card-header">
-                <h2>Étapes</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h2>Étapes</h2>
+                    </div>
+                    <div class="col-md-9">
+                        <nav id="navbar-step" class="navbar bg-body-tertiary px-3 mb-3">
+                            <ul class="nav nav-pills">
+                                <?php foreach($steps as $step) { ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-warning btn-sm" href="#navbar-step">Étape <?= $step['order'] ?></a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <?php foreach($steps as $step) { ?>
-                <h4 id="list-step-<?= $step['order'] ?>">Étape <?= $step['order'] ?></h4>
-                    <p><?= $step['description'] ?> </p>
-                <?php } ?>
+                <div data-bs-spy="scroll" data-bs-target="#scroll">
+                    <?php foreach($steps as $step) { ?>
+                        <h4 id="list-step-<?= $step['order'] ?>">Étape <?= $step['order'] ?></h4>
+                        <p><?= $step['description'] ?> </p>
+                    <?php } ?>
+                </div>
+
             </div>
         </div>
     </div>
@@ -305,5 +321,8 @@
     #heart {
         width: fit-content;
         margin: auto;
+    }
+    .nav-link{
+        color: black;
     }
 </style>
