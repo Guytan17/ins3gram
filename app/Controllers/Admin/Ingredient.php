@@ -81,17 +81,31 @@ class Ingredient extends BaseController
         helper('form');
         $brands=model('BrandModel')->orderBy('name')->findAll();
         $categories=model('CategIngModel')->orderBy('name')->findAll();
-        $ingredient=model('IngredientModel')->find($id_ingredient);
+        $ingredient=model('IngredientModel')->getIngredientById($id_ingredient);
         $substitutes=model('SubstituteModel')->getSubByIdBase($id_ingredient);
         $substituted=model('SubstituteModel')->getBaseByIdSub($id_ingredient);
-        $brand=model('BrandModel')->find($ingredient['id_brand']);
+        if(isset($ingredient['id_brand'])){
+            $brand=model('BrandModel')->find($ingredient['id_brand']);
+        }
         $category=model('CategIngModel')->find($ingredient['id_categ']);
         if (!$ingredient) {
             $this->error('Ingrédient introuvable');
             return $this->redirect('admin/ingredient');
         }
-        return $this->view('admin/ingredient/form', ['brands'=>$brands,'categories'=>$categories, 'ingredient'=>$ingredient,'brand'=>$brand,'category'=>$category,'substitutes'=>$substitutes,
-            'substituted'=>$substituted]);
+       $data =
+            [
+                'brands'=>$brands,
+                'categories'=>$categories,
+                'ingredient'=>$ingredient,
+                'category'=>$category,
+                'substitutes'=>$substitutes,
+                'substituted'=>$substituted
+            ];
+       if(isset($brand)) {
+           $data['brand'] = $brand ;
+       }
+
+        return $this->view('admin/ingredient/form',$data);
     }
     public function update(){
         $data=$this->request->getPost();

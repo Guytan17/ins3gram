@@ -22,13 +22,25 @@
             <div class="card-body">
                 <div class="row g-3">
                     <!-- Nom de l'ingrédient -->
-                    <div class="col-12">
+                    <div class="col-md-6">
                         <div class="form-floating">
                             <input class="form-control" type="text" id="name" name="name" value="<?= isset($ingredient) ? esc($ingredient['name']): set_value('name'); ?>" required>
                             <label for="name">Nom de l'ingrédient<span class="text-danger">*</span></label>
                             <div class="invalid-feedback">
                                 <?= validation_show_error('username') ?>
                             </div>
+                        </div>
+                    </div>
+                    <!-- Image-->
+                    <div class="col-md-6">
+                        <div class="row g-2">
+                            <div class="img-thumbnail text-center mb-2">
+                                <img src="<?= base_url($ingredient['img']) ?? base_url('assets/img/default-avatar.png') ?>" alt="image de l'ingrédient" title="Image de
+                                l'ingrédient" id="img-ing">
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <input type="file" name="image" id="image" class="form-control">
                         </div>
                     </div>
                     <!-- Description de l'ingrédient -->
@@ -109,7 +121,7 @@
                             </div>
                         </div>
                         <?php if(isset($ingredient)){ ?>
-                                <!-- Affichage des ingrédients que celui-ci substituent -->
+                            <!-- Affichage des ingrédients que celui-ci substituent -->
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
@@ -117,6 +129,7 @@
                                         Aucun ingrédient n'est substitué par<span class="fw-bolder mx-1"><?=$ingredient['name']?></span>
                                     <?php else : ?>
                                         Ingrédients substitués par <span class="fw-bolder mx-1"><?=$ingredient['name']?></span> :
+                                    <?php endif; ?>
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-striped table-sm">
@@ -136,36 +149,27 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <?php endif; ?>
                             </div>
                         </div>
                         <?php } ?>
-                    <!-- Image-->
-                    </div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="image" class="form-label">Image de l'ingrédient</label>
-                            <input type="file" name="image" id="image" class="form-control mt-2">
-                        </div>
-                        <div class="col-md-6">
-
-                        </div>
-                    <div>
                     </div>
                 </div>
             </div>
-            <div class="card-footer text-end mt-2">
-                <?php if(!isset($ingredient)):?>
-                    <button type="reset" class="btn btn-outline-secondary me-2">
-                        <i class="fas fa-undo me-1"></i> Réinitialiser
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i> Créer l'ingrédient
-                    </button>
-                <?php else :?>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-1"></i> Modifier l'ingrédient
-                    </button>
-                <?php endif; ?>
+            <div class="card-footer">
+                <div class="text-end mt-2">
+                    <?php if(!isset($ingredient)):?>
+                        <button type="reset" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-undo me-1"></i> Réinitialiser
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i> Créer l'ingrédient
+                        </button>
+                    <?php else :?>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Modifier l'ingrédient
+                        </button>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php form_close();?>
         </div>
@@ -295,5 +299,10 @@
 <style>
     .supp-substitute {
         cursor:pointer;
+    }
+    #img-ing{
+        width:200px;
+        height: 200px;
+        object-fit: contain;
     }
 </style>

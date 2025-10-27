@@ -50,8 +50,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="text-center" id="modalImagePreview">
-                    <img src="<?= base_url('assets/img/no-img.png') ?>" alt="Aperçu" class="img-thumbnail mb-3 ">
+                <div class="text-center" >
+                    <img id="modalImagePreview" src="<?= base_url('assets/img/no-img.png') ?>" alt="Aperçu" class="img-thumbnail mb-3 ">
                 </div>
                 <div class="mb-3">
                     <label for="modalImageInput"> Modifier l'image: </label>
@@ -196,7 +196,7 @@
         if (!img_url) {
             img_url = base_url + '/assets/img/no-img.png';
         }
-        $('#modalImagePreview img').attr('src', img_url);
+        $('#modalImagePreview').attr('src', img_url);
         myModal.show();
     }
     function saveBrand() {
@@ -287,5 +287,6 @@
     .modal-body .img-thumbnail{
         height: 250px;
         width: 250px;
+        object-fit: cover;
     }
 </style>
